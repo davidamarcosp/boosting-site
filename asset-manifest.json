@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/boosting-site/static/css/main.5f361e03.chunk.css",
-    "main.js": "/boosting-site/static/js/main.eca9c285.chunk.js",
-    "main.js.map": "/boosting-site/static/js/main.eca9c285.chunk.js.map",
+    "main.js": "/boosting-site/static/js/main.08b3049d.chunk.js",
+    "main.js.map": "/boosting-site/static/js/main.08b3049d.chunk.js.map",
     "runtime-main.js": "/boosting-site/static/js/runtime-main.94275756.js",
     "runtime-main.js.map": "/boosting-site/static/js/runtime-main.94275756.js.map",
-    "static/js/2.643eeb82.chunk.js": "/boosting-site/static/js/2.643eeb82.chunk.js",
-    "static/js/2.643eeb82.chunk.js.map": "/boosting-site/static/js/2.643eeb82.chunk.js.map",
+    "static/js/2.8a577baa.chunk.js": "/boosting-site/static/js/2.8a577baa.chunk.js",
+    "static/js/2.8a577baa.chunk.js.map": "/boosting-site/static/js/2.8a577baa.chunk.js.map",
     "index.html": "/boosting-site/index.html",
-    "precache-manifest.5479f58622120586c509ff98af2dc780.js": "/boosting-site/precache-manifest.5479f58622120586c509ff98af2dc780.js",
+    "precache-manifest.13e6fded6f253967522328f58abe81bd.js": "/boosting-site/precache-manifest.13e6fded6f253967522328f58abe81bd.js",
     "service-worker.js": "/boosting-site/service-worker.js",
     "static/css/main.5f361e03.chunk.css.map": "/boosting-site/static/css/main.5f361e03.chunk.css.map",
-    "static/js/2.643eeb82.chunk.js.LICENSE.txt": "/boosting-site/static/js/2.643eeb82.chunk.js.LICENSE.txt",
+    "static/js/2.8a577baa.chunk.js.LICENSE.txt": "/boosting-site/static/js/2.8a577baa.chunk.js.LICENSE.txt",
     "static/media/Banner.jpg": "/boosting-site/static/media/Banner.d65e0b38.jpg",
     "static/media/Chat.png": "/boosting-site/static/media/Chat.f09e4946.png",
     "static/media/Logo.jpg": "/boosting-site/static/media/Logo.61047e80.jpg",
@@ -20,8 +20,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.94275756.js",
-    "static/js/2.643eeb82.chunk.js",
+    "static/js/2.8a577baa.chunk.js",
     "static/css/main.5f361e03.chunk.css",
-    "static/js/main.eca9c285.chunk.js"
+    "static/js/main.08b3049d.chunk.js"
   ]
 }
