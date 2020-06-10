@@ -14,9 +14,10 @@ import useStyles from './Styles';
 //
 import Footer from '../Common/Footer/Footer';
 import Navbar from '../Common/Navbar/Navbar';
+import { withRouter } from 'react-router';
 
 
-function Landing() {
+function Landing(props) {
 
   const classes = useStyles();
 
@@ -79,6 +80,7 @@ function Landing() {
                   size="small"
                   color="primary"
                   className={classes.finalButton}
+                  onClick={() => props.history.push('/services/order-now')}
                 >
                   Check our prices
                 </Button>
@@ -93,4 +95,4 @@ function Landing() {
   );
 };
 
-export default Landing;
+export default withRouter(Landing);

@@ -20,14 +20,14 @@ import Divider from '@material-ui/core/Divider';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Link from '@material-ui/core/Link';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PersonIcon from '@material-ui/icons/Person';
 import Toolbar from '@material-ui/core/Toolbar';
 import Logo from '../../Landing/Logo.jpg';
 import useStyles from './NavbarStyles';
+import { withRouter } from 'react-router';
 
-function Navbar() {
+function Navbar(props) {
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -54,9 +54,7 @@ function Navbar() {
   };
 
   const logoNavbar = (
-    <Link href='/'>
-      <Avatar alt="Logo" src={Logo} className={classes.Logo} />
-    </Link>
+    <Avatar alt="Logo" src={Logo} className={classes.Logo} onClick={() => props.history.push('/')}/>
   );
 
   const desktopNavbar = (
@@ -79,7 +77,7 @@ function Navbar() {
             onClick={handleToggle}
           >
             ORDER NOW
-            </Button>
+          </Button>
           <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
             {({ TransitionProps, placement }) => (
               <Grow
@@ -90,19 +88,19 @@ function Navbar() {
                   <ClickAwayListener onClickAway={handleClose}>
                     <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                       <MenuItem onClick={handleClose}>
-                        <Typography align="center">
+                        <Typography align="center" onClick={() => props.history.push('/services/order-now')}>
                           Solo Q Boosting
-                          </Typography>
+                        </Typography>
                       </MenuItem>
                       <MenuItem onClick={handleClose}>
-                        <Typography align="center">
+                        <Typography align="center" onClick={() => props.history.push('/services/order-now')}>
                           Duo Q Boosting
-                          </Typography>
+                        </Typography>
                       </MenuItem>
                       <MenuItem onClick={handleClose} style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography>
+                        <Typography onClick={() => props.history.push('/services/order-now')}>
                           LoL Coaching
-                          </Typography>
+                        </Typography>
                       </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
@@ -162,15 +160,15 @@ function Navbar() {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Breadcrumbs aria-label="breadcrumb" style={{ marginLeft: 'auto', marginRight: 'auto' }} separator="›">
-                <Button>
+                <Button onClick={() => props.history.push('/services/order-now')}>
                   Solo Q
-                  </Button>
-                <Button>
+                </Button>
+                <Button onClick={() => props.history.push('/services/order-now')}>
                   Duo Q
-                  </Button>
-                <Button>
+                </Button>
+                <Button onClick={() => props.history.push('/services/order-now')}>
                   Coaching
-                  </Button>
+                </Button>
               </Breadcrumbs>
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -200,4 +198,4 @@ function Navbar() {
   );
 };
 
-export default Navbar;
+export default withRouter(Navbar);

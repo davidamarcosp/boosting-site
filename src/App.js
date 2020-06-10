@@ -1,6 +1,6 @@
 import React from 'react';
 import Landing from './Landing/Landing';
-import Purchase1 from './Purchase/Purchase1';
+import Purchase from './Purchase/Purchase';
 import { Switch, Route } from 'react-router-dom';
 import './App.css';
 
@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <Switch>
         <Route exact path="/" component={Landing} />
-        <Route exact path="/boosting/purchase" component={Purchase1} />
+        <Route exact path="/services/order-now" component={Purchase} />
       </Switch>
     </div>
   );

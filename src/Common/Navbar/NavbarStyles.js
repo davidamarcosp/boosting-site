@@ -4,6 +4,7 @@ const useStyles = makeStyles(theme => ({
   Logo: {
     height: '50px',
     width: '50px',
+    cursor: 'pointer',
     [theme.breakpoints.up('sm')]: {
       height: '65px',
       width: '65px',
