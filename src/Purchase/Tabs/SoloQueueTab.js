@@ -68,17 +68,17 @@ function SoloQueueTab() {
 
   React.useEffect(() => {
     setTierImageUrl(null);
-    Firebase.getBadgeImage(tier, division)
+    Firebase.getBadgeImage(queueType, tier, division)
       .then(url => setTierImageUrl(url))
       .catch(err => console.log(err));
-  }, [tier, division]);
+  }, [tier, division, queueType]);
 
   React.useEffect(() => {
     setDesiredTierImageUrl(null);
-    Firebase.getBadgeImage(desiredTier, desiredDivision)
+    Firebase.getBadgeImage(queueType, desiredTier, desiredDivision)
       .then(url => setDesiredTierImageUrl(url))
       .catch(err => console.log(err));
-  }, [desiredTier, desiredDivision]);
+  }, [desiredTier, desiredDivision, queueType]);
 
   const divisionSection = (
     <Grid container>
@@ -183,6 +183,13 @@ function SoloQueueTab() {
 
   const winSection = (
     <Grid container>
+      <Grid item xs={12} style={{ height: '200px' }}>
+        {
+          tierImageUrl
+            ? <img alt="ranked badge" src={tierImageUrl} style={{ width: '170px', height: 'auto' }} />
+            : <CircularProgress size={100} style={{ margin: '37.5px' }} />
+        }
+      </Grid>
       <Grid item xs={12}>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="demo-simple-select-outlined-label">Tier</InputLabel>
@@ -194,10 +201,11 @@ function SoloQueueTab() {
             label="Tier"
           >
             <MenuItem value={1}>Iron</MenuItem>
-            <MenuItem value={2}>Silver</MenuItem>
-            <MenuItem value={3}>Gold</MenuItem>
-            <MenuItem value={4}>Platinum</MenuItem>
-            <MenuItem value={5}>Diamond</MenuItem>
+            <MenuItem value={2}>Bronze</MenuItem>
+            <MenuItem value={3}>Silver</MenuItem>
+            <MenuItem value={4}>Gold</MenuItem>
+            <MenuItem value={5}>Platinum</MenuItem>
+            <MenuItem value={6}>Diamond</MenuItem>
           </Select>
         </FormControl>
       </Grid>
@@ -238,6 +246,13 @@ function SoloQueueTab() {
 
   const rankedGameSection = (
     <Grid container>
+      <Grid item xs={12} style={{ height: '200px' }}>
+        {
+          tierImageUrl
+            ? <img alt="ranked badge" src={tierImageUrl} style={{ width: '170px', height: 'auto' }} />
+            : <CircularProgress size={100} style={{ margin: '37.5px' }} />
+        }
+      </Grid>
       <Grid item xs={12}>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="demo-simple-select-outlined-label">Tier</InputLabel>
@@ -249,10 +264,11 @@ function SoloQueueTab() {
             label="Tier"
           >
             <MenuItem value={1}>Iron</MenuItem>
-            <MenuItem value={2}>Silver</MenuItem>
-            <MenuItem value={3}>Gold</MenuItem>
-            <MenuItem value={4}>Platinum</MenuItem>
-            <MenuItem value={5}>Diamond</MenuItem>
+            <MenuItem value={2}>Bronze</MenuItem>
+            <MenuItem value={3}>Silver</MenuItem>
+            <MenuItem value={4}>Gold</MenuItem>
+            <MenuItem value={5}>Platinum</MenuItem>
+            <MenuItem value={6}>Diamond</MenuItem>
           </Select>
         </FormControl>
       </Grid>
@@ -276,6 +292,13 @@ function SoloQueueTab() {
 
   const normalGameSection = (
     <Grid container>
+      <Grid item xs={12} style={{ height: '200px' }}>
+        {
+          tierImageUrl
+            ? <img alt="ranked badge" src={tierImageUrl} style={{ width: '170px', height: 'auto' }} />
+            : <CircularProgress size={100} style={{ margin: '37.5px' }} />
+        }
+      </Grid>
       <Grid item xs={12}>
         <TextField
           className={classes.formControl}

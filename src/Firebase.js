@@ -25,11 +25,24 @@ class Firebase {
     this.storage = app.storage();
   };
 
-  getBadgeImage = (tier, division) => {
-    const imageRoute = `badges/${tier}/${division}.png`;
-    const storaRef = this.storage.ref();
-    const badgeImageRef = storaRef.child(imageRoute);
-    return badgeImageRef.getDownloadURL();
+  getBadgeImage = (queueType, tier, division) => {
+
+    if (queueType !== "Normal Games") {
+
+      const imageRoute = `badges/${tier}/${division}.png`;
+      const storaRef = this.storage.ref();
+      const badgeImageRef = storaRef.child(imageRoute);
+      return badgeImageRef.getDownloadURL();
+
+    } else {
+
+      const imageRoute = `badges/Normal_Games.png`;
+      const storaRef = this.storage.ref();
+      const badgeImageRef = storaRef.child(imageRoute);
+      return badgeImageRef.getDownloadURL();
+
+    }
+
   };
 
 };
