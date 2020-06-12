@@ -5,16 +5,16 @@ import useLPState from './Hooks/useLPState';
 
 const useDivisionState = () => {
 
-  const {tier, setTier} = useTierState(1);
-  const {division, setDivision} = useInitialDivisionState(4);
+  const {tier, setTier} = useTierState(3);
+  const {division, setDivision} = useInitialDivisionState(1);
   const {LP, setLP} = useLPState('0-20');
-  const [desiredTier, setDesiredTier] = React.useState(1);
-  const [desiredDivision, setDesiredDivision] = React.useState(3);
+  const [desiredTier, setDesiredTier] = React.useState(4);
+  const [desiredDivision, setDesiredDivision] = React.useState(4);
 
   React.useEffect(() => {
-    if (tier === 5 && division === 1) {
+    if (tier === 6 && division === 1) {
       setDivision(2);
-      setDesiredTier(5);
+      setDesiredTier(6);
       setDesiredDivision(1);
     } else if (tier > desiredTier && division === 1) {
       setDesiredTier(tier + 1);

@@ -5,64 +5,83 @@ const getDesiredTier = (tier, division) => {
   if (tier === 1) {
     if (division === 1) {
       return [
-        <MenuItem value={2}>Silver</MenuItem>,
-        <MenuItem value={3}>Gold</MenuItem>,
-        <MenuItem value={4}>Platinum</MenuItem>,
-        <MenuItem value={5}>Diamond</MenuItem>
+        <MenuItem value={2}>Bronze</MenuItem>,
+        <MenuItem value={3}>Silver</MenuItem>,
+        <MenuItem value={4}>Gold</MenuItem>,
+        <MenuItem value={5}>Platinum</MenuItem>,
+        <MenuItem value={6}>Diamond</MenuItem>
       ];
     } else {
       return [
         <MenuItem value={1}>Iron</MenuItem>,
-        <MenuItem value={2}>Silver</MenuItem>,
-        <MenuItem value={3}>Gold</MenuItem>,
-        <MenuItem value={4}>Platinum</MenuItem>,
-        <MenuItem value={5}>Diamond</MenuItem>
+        <MenuItem value={2}>Bronze</MenuItem>,
+        <MenuItem value={3}>Silver</MenuItem>,
+        <MenuItem value={4}>Gold</MenuItem>,
+        <MenuItem value={5}>Platinum</MenuItem>,
+        <MenuItem value={6}>Diamond</MenuItem>
       ];
     }
   } else if (tier === 2) {
     if (division === 1) {
       return [
-        <MenuItem value={3}>Gold</MenuItem>,
-        <MenuItem value={4}>Platinum</MenuItem>,
-        <MenuItem value={5}>Diamond</MenuItem>
+        <MenuItem value={3}>Silver</MenuItem>,
+        <MenuItem value={4}>Gold</MenuItem>,
+        <MenuItem value={5}>Platinum</MenuItem>,
+        <MenuItem value={6}>Diamond</MenuItem>
       ];
     } else {
       return [
-        <MenuItem value={2}>Silver</MenuItem>,
-        <MenuItem value={3}>Gold</MenuItem>,
-        <MenuItem value={4}>Platinum</MenuItem>,
-        <MenuItem value={5}>Diamond</MenuItem>
+        <MenuItem value={2}>Bronze</MenuItem>,
+        <MenuItem value={3}>Silver</MenuItem>,
+        <MenuItem value={4}>Gold</MenuItem>,
+        <MenuItem value={5}>Platinum</MenuItem>,
+        <MenuItem value={6}>Diamond</MenuItem>
       ];
     }
   } else if (tier === 3) {
     if (division === 1) {
       return [
-        <MenuItem value={4}>Platinum</MenuItem>,
-        <MenuItem value={5}>Diamond</MenuItem>
+        <MenuItem value={4}>Gold</MenuItem>,
+        <MenuItem value={5}>Platinum</MenuItem>,
+        <MenuItem value={6}>Diamond</MenuItem>
       ];
     } else {
       return [
-        <MenuItem value={3}>Gold</MenuItem>,
-        <MenuItem value={4}>Platinum</MenuItem>,
-        <MenuItem value={5}>Diamond</MenuItem>
+        <MenuItem value={3}>Silver</MenuItem>,
+        <MenuItem value={4}>Gold</MenuItem>,
+        <MenuItem value={5}>Platinum</MenuItem>,
+        <MenuItem value={6}>Diamond</MenuItem>
       ];
     }
   } else if (tier === 4) {
     if (division === 1) {
       return [
-        <MenuItem value={5}>Diamond</MenuItem>
+        <MenuItem value={5}>Platinum</MenuItem>,
+        <MenuItem value={6}>Diamond</MenuItem>
       ];
     } else {
       return [
-        <MenuItem value={4}>Platinum</MenuItem>,
-        <MenuItem value={5}>Diamond</MenuItem>
+        <MenuItem value={4}>Gold</MenuItem>,
+        <MenuItem value={5}>Platinum</MenuItem>,
+        <MenuItem value={6}>Diamond</MenuItem>
       ];
     }
   } else if (tier === 5) {
+    if (division === 1) {
+      return [
+        <MenuItem value={6}>Diamond</MenuItem>
+      ];
+    } else {
+      return [
+        <MenuItem value={5}>Platinum</MenuItem>,
+        <MenuItem value={6}>Diamond</MenuItem>
+      ];
+    }
+  } else if (tier === 6) {
     return [
-      <MenuItem value={5}>Diamond</MenuItem>
+      <MenuItem value={6}>Diamond</MenuItem>
     ];
-  }
+  };
 };
 
 const getDesiredDivision = (tier, finalTier, division) => {
@@ -93,4 +112,4 @@ const getDesiredDivision = (tier, finalTier, division) => {
   };
 };
 
-export {getDesiredTier, getDesiredDivision};
+export { getDesiredTier, getDesiredDivision };
