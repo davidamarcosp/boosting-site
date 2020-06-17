@@ -25,23 +25,46 @@ class Firebase {
     this.storage = app.storage();
   };
 
+  doAuthListener = (fn) => this.auth.onAuthStateChanged(fn);
+
   getBadgeImage = (queueType, tier, division) => {
 
-    if (queueType !== "Normal Games") {
+    if (queueType === "Division" || queueType === "Wins") {
 
       const imageRoute = `badges/${tier}/${division}.png`;
       const storaRef = this.storage.ref();
       const badgeImageRef = storaRef.child(imageRoute);
       return badgeImageRef.getDownloadURL();
 
-    } else {
+    } else if (queueType === "Ranked Games") {
+
+      const imageRoute = `badges/${tier}/3.png`;
+      const storaRef = this.storage.ref();
+      const badgeImageRef = storaRef.child(imageRoute);
+      return badgeImageRef.getDownloadURL();
+
+    } else if (queueType === "Normal Games") {
 
       const imageRoute = `badges/Normal_Games.png`;
       const storaRef = this.storage.ref();
       const badgeImageRef = storaRef.child(imageRoute);
       return badgeImageRef.getDownloadURL();
 
-    }
+    } else if (queueType === "Placement") {
+
+      const imageRoute = `badges/Placement.png`;
+      const storaRef = this.storage.ref();
+      const badgeImageRef = storaRef.child(imageRoute);
+      return badgeImageRef.getDownloadURL();
+
+    } else if (queueType === "Clash") {
+
+      const imageRoute = `badges/Clash.png`;
+      const storaRef = this.storage.ref();
+      const badgeImageRef = storaRef.child(imageRoute);
+      return badgeImageRef.getDownloadURL();
+
+    };
 
   };
 

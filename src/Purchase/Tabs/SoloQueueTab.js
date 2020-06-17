@@ -5,11 +5,15 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { getDesiredTier, getDesiredDivision } from '../Utils/FormUtilities';
-import useDivisionState from '../Utils/useDivisionState';
-import Firebase from '../../Firebase';
+import { PurchaseContext } from '../../Common/Context/PurchaseContext';
+import CurrentTierBadge from '../Components/CurrentTierBadge';
+import DesiredTierBadge from '../Components/DesiredTierBadge';
+import CurrentTierForm from '../Components/CurrentTierForm';
+import CurrentDivisionForm from '../Components/CurrentDivisionForm';
+import CurrentLPForm from '../Components/CurrentLPForm';
+import DesiredTierForm from '../Components/DesiredTierForm';
+import DesiredDivisionForm from '../Components/DesiredDivisionForm';
+import NumberOfGamesForm from '../Components/NumberOfGamesForm';
 
 function SoloQueueTab() {
 
@@ -28,33 +32,11 @@ function SoloQueueTab() {
   }));
 
   const classes = useStyles();
-  const [queueType, setQueueType] = React.useState('Division');
-  const [gameNumber, setGameNumber] = React.useState(1);
 
   const {
-    tier,
-    desiredTier,
-    division,
-    desiredDivision,
-    LP,
-    handleTierChange,
-    handleDivisionChange,
-    handleLPChange,
-    handleDesiredTierChange,
-    handleDesiredDivisionChange
-  } = useDivisionState();
-
-  const handleChangeSelect = event => {
-    setQueueType(event.target.value);
-  };
-
-  const handleGameNumberChange = event => {
-    if (event.target.value >= 100) {
-      setGameNumber(100);
-    } else {
-      setGameNumber(event.target.value);
-    }
-  };
+    queueType,
+    handleQueueTypeChange
+  } = React.useContext(PurchaseContext);
 
   const getSection = (queueType) => {
     if (queueType === "Division") return divisionSection;
@@ -63,120 +45,22 @@ function SoloQueueTab() {
     if (queueType === "Normal Games") return normalGameSection;
   };
 
-  const [tierImageUrl, setTierImageUrl] = React.useState(null);
-  const [desiredTierImageUrl, setDesiredTierImageUrl] = React.useState(null);
-
-  React.useEffect(() => {
-    setTierImageUrl(null);
-    Firebase.getBadgeImage(queueType, tier, division)
-      .then(url => setTierImageUrl(url))
-      .catch(err => console.log(err));
-  }, [tier, division, queueType]);
-
-  React.useEffect(() => {
-    setDesiredTierImageUrl(null);
-    Firebase.getBadgeImage(queueType, desiredTier, desiredDivision)
-      .then(url => setDesiredTierImageUrl(url))
-      .catch(err => console.log(err));
-  }, [desiredTier, desiredDivision, queueType]);
-
   const divisionSection = (
     <Grid container>
       <Grid item xs={6} style={{ height: '200px' }}>
-        {
-          tierImageUrl
-            ? <img alt="ranked badge" src={tierImageUrl} style={{ width: '170px', height: 'auto' }} />
-            : <CircularProgress size={100} style={{ margin: '37.5px' }} />
-        }
+        <CurrentTierBadge />
       </Grid>
       <Grid item xs={6} style={{ height: '200px' }}>
-        {
-          desiredTierImageUrl
-            ? <img alt="ranked badge" src={desiredTierImageUrl} style={{ width: '170px', height: 'auto' }} />
-            : <CircularProgress size={100} style={{ margin: '37.5px' }} />
-        }
+        <DesiredTierBadge />
       </Grid>
       <Grid item xs={6}>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-outlined-label">Tier</InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={tier}
-            onChange={handleTierChange}
-            label="Tier"
-          >
-            <MenuItem value={1}>Iron</MenuItem>
-            <MenuItem value={2}>Bronze</MenuItem>
-            <MenuItem value={3}>Silver</MenuItem>
-            <MenuItem value={4}>Gold</MenuItem>
-            <MenuItem value={5}>Platinum</MenuItem>
-            <MenuItem value={6}>Diamond</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-outlined-label">Division</InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={division}
-            onChange={handleDivisionChange}
-            label="Division"
-          >
-            {
-              tier === 6
-                ? [<MenuItem value={4}>IV</MenuItem>,
-                <MenuItem value={3}>III</MenuItem>,
-                <MenuItem value={2}>II</MenuItem>]
-                : [<MenuItem value={4}>IV</MenuItem>,
-                <MenuItem value={3}>III</MenuItem>,
-                <MenuItem value={2}>II</MenuItem>,
-                <MenuItem value={1}>I</MenuItem>]
-            }
-          </Select>
-        </FormControl>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-outlined-label">LP</InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={LP}
-            onChange={handleLPChange}
-            label="LP"
-          >
-            <MenuItem value="0-20">0 - 20</MenuItem>
-            <MenuItem value="20-40">20 - 40</MenuItem>
-            <MenuItem value="40-60">40 - 60</MenuItem>
-            <MenuItem value="60-80">60 - 80</MenuItem>
-            <MenuItem value="80-100">80 - 100</MenuItem>
-          </Select>
-        </FormControl>
+        <CurrentTierForm />
+        <CurrentDivisionForm />
+        <CurrentLPForm />
       </Grid>
       <Grid item xs={6}>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-outlined-label">Desired Tier</InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={desiredTier}
-            onChange={handleDesiredTierChange}
-            label="Desired Tier"
-          >
-            {getDesiredTier(tier, division)}
-          </Select>
-        </FormControl>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-outlined-label">Desired Division</InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={desiredDivision}
-            onChange={handleDesiredDivisionChange}
-            label="Desired Division"
-          >
-            {getDesiredDivision(tier, desiredTier, division)}
-          </Select>
-        </FormControl>
+        <DesiredTierForm />
+        <DesiredDivisionForm />
       </Grid>
     </Grid >
   );
@@ -184,62 +68,16 @@ function SoloQueueTab() {
   const winSection = (
     <Grid container>
       <Grid item xs={12} style={{ height: '200px' }}>
-        {
-          tierImageUrl
-            ? <img alt="ranked badge" src={tierImageUrl} style={{ width: '170px', height: 'auto' }} />
-            : <CircularProgress size={100} style={{ margin: '37.5px' }} />
-        }
+        <CurrentTierBadge />
       </Grid>
       <Grid item xs={12}>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-outlined-label">Tier</InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={tier}
-            onChange={handleTierChange}
-            label="Tier"
-          >
-            <MenuItem value={1}>Iron</MenuItem>
-            <MenuItem value={2}>Bronze</MenuItem>
-            <MenuItem value={3}>Silver</MenuItem>
-            <MenuItem value={4}>Gold</MenuItem>
-            <MenuItem value={5}>Platinum</MenuItem>
-            <MenuItem value={6}>Diamond</MenuItem>
-          </Select>
-        </FormControl>
+        <CurrentTierForm />
       </Grid>
       <Grid item xs={6}>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-outlined-label">Division</InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={division}
-            onChange={handleDivisionChange}
-            label="Division"
-          >
-            <MenuItem value={4}>IV</MenuItem>
-            <MenuItem value={3}>III</MenuItem>
-            <MenuItem value={2}>II</MenuItem>
-            <MenuItem value={1}>I</MenuItem>
-          </Select>
-        </FormControl>
+        <CurrentDivisionForm />
       </Grid>
       <Grid item xs={6}>
-        <TextField
-          className={classes.formControl}
-          id="outlined-number"
-          label="# of Games"
-          type="number"
-          onChange={handleGameNumberChange}
-          value={gameNumber}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          inputProps={{ min: 1, step: 1, style: { textAlign: 'center' } }}
-          variant="outlined"
-        />
+        <NumberOfGamesForm />
       </Grid>
     </Grid>
   );
@@ -247,45 +85,13 @@ function SoloQueueTab() {
   const rankedGameSection = (
     <Grid container>
       <Grid item xs={12} style={{ height: '200px' }}>
-        {
-          tierImageUrl
-            ? <img alt="ranked badge" src={tierImageUrl} style={{ width: '170px', height: 'auto' }} />
-            : <CircularProgress size={100} style={{ margin: '37.5px' }} />
-        }
+        <CurrentTierBadge />
       </Grid>
       <Grid item xs={12}>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-outlined-label">Tier</InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={tier}
-            onChange={handleTierChange}
-            label="Tier"
-          >
-            <MenuItem value={1}>Iron</MenuItem>
-            <MenuItem value={2}>Bronze</MenuItem>
-            <MenuItem value={3}>Silver</MenuItem>
-            <MenuItem value={4}>Gold</MenuItem>
-            <MenuItem value={5}>Platinum</MenuItem>
-            <MenuItem value={6}>Diamond</MenuItem>
-          </Select>
-        </FormControl>
+        <CurrentTierForm />
       </Grid>
       <Grid item xs={12}>
-        <TextField
-          className={classes.formControl}
-          id="outlined-number"
-          label="# of Games"
-          type="number"
-          onChange={handleGameNumberChange}
-          value={gameNumber}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          inputProps={{ min: 1, step: 1, style: { textAlign: 'center' } }}
-          variant="outlined"
-        />
+        <NumberOfGamesForm />
       </Grid>
     </Grid>
   );
@@ -293,29 +99,14 @@ function SoloQueueTab() {
   const normalGameSection = (
     <Grid container>
       <Grid item xs={12} style={{ height: '200px' }}>
-        {
-          tierImageUrl
-            ? <img alt="ranked badge" src={tierImageUrl} style={{ width: '170px', height: 'auto' }} />
-            : <CircularProgress size={100} style={{ margin: '37.5px' }} />
-        }
       </Grid>
       <Grid item xs={12}>
-        <TextField
-          className={classes.formControl}
-          id="outlined-number"
-          label="# of Games"
-          type="number"
-          onChange={handleGameNumberChange}
-          value={gameNumber}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          inputProps={{ min: 1, step: 1, style: { textAlign: 'center' } }}
-          variant="outlined"
-        />
+        <NumberOfGamesForm />
       </Grid>
     </Grid>
   );
+
+  console.log('RENDER SOLO QUEUE');
 
   return (
     <Grid container>
@@ -326,7 +117,7 @@ function SoloQueueTab() {
             labelId="demo-simple-select-outlined-label"
             id="demo-simple-select-outlined"
             value={queueType}
-            onChange={handleChangeSelect}
+            onChange={handleQueueTypeChange}
             label="Type"
           >
             <MenuItem value="Division">Division</MenuItem>
@@ -341,4 +132,4 @@ function SoloQueueTab() {
   );
 };
 
-export default SoloQueueTab;
+export default React.memo(SoloQueueTab);

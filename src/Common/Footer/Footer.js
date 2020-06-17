@@ -10,7 +10,7 @@ function Footer() {
 
   const Copyright = () => {
     return (
-      <Typography variant="body2" color="textSecondary">
+      <Typography component="span" variant="body2" color="textSecondary">
         {'Copyright © '}
         <Link color="inherit" href="#">
           Best Boosting Site

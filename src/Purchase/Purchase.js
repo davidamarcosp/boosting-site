@@ -4,16 +4,17 @@ import Footer from '../Common/Footer/Footer';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
-import SwipeableViews from 'react-swipeable-views';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import SoloQueueTab from './Tabs/SoloQueueTab';
 import PlacementTab from './Tabs/PlacementTab';
 import ClashTab from './Tabs/ClashTab';
+
+//
+import PurchaseOrder from './Utils/PurchaseOrder';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -27,9 +28,7 @@ const TabPanel = (props) => {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
+        <Box p={3}>{children}</Box>
       )}
     </div>
   );
@@ -48,23 +47,8 @@ const a11yProps = (index) => {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    width: '100%',
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: '60%',
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
-
 function Purchase() {
 
-  const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -72,57 +56,50 @@ function Purchase() {
     setValue(newValue);
   };
 
-  const handleIndexChange = (index) => {
-    setValue(index);
-  };
+  console.log('RENDER PURCHASE');
 
   return (
     <div>
       <Navbar />
-      <div className={classes.root}>
-        <Container component="main" maxWidth="lg" disableGutters={true}>
-          <Grid container style={{ marginTop: '3rem' }}>
-            <Grid item xs={12} md={9} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-              <AppBar position="static" color="default">
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  indicatorColor="primary"
-                  textColor="primary"
-                  variant="fullWidth"
-                  aria-label="full width tabs example"
-                >
-                  <Tab label="Solo Queue" {...a11yProps(0)} />
-                  <Tab label="Duo Queue" {...a11yProps(1)} />
-                  <Tab label="Placements" {...a11yProps(2)} />
-                  <Tab label="Clash" {...a11yProps(3)} />
-                </Tabs>
-              </AppBar>
-              <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                index={value}
-                onChangeIndex={handleIndexChange}
+      <Container component="main" maxWidth="lg" disableGutters={true}>
+        <Grid container style={{ marginTop: '3rem' }}>
+          <Grid item xs={12} md={9} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+            <AppBar position="static" color="default">
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+                aria-label="full width tabs example"
               >
-                <TabPanel value={value} index={0} dir={theme.direction}>
-                  <SoloQueueTab />
-                </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction}>
-                  <SoloQueueTab />
-                </TabPanel>
-                <TabPanel value={value} index={2} dir={theme.direction}>
-                  <PlacementTab />
-                </TabPanel>
-                <TabPanel value={value} index={3} dir={theme.direction}>
-                  <ClashTab />
-                </TabPanel>
-              </SwipeableViews>
+                <Tab label="Solo Queue" {...a11yProps(0)} />
+                <Tab label="Duo Queue" {...a11yProps(1)} />
+                <Tab label="Placements" {...a11yProps(2)} />
+                <Tab label="Clash (soon)" {...a11yProps(3)} disabled />
+              </Tabs>
+            </AppBar>
+            <TabPanel value={value} index={0} dir={theme.direction}>
+              <SoloQueueTab />
+            </TabPanel>
+            <TabPanel value={value} index={1} dir={theme.direction}>
+              <SoloQueueTab />
+            </TabPanel>
+            <TabPanel value={value} index={2} dir={theme.direction}>
+              <PlacementTab />
+            </TabPanel>
+            <TabPanel value={value} index={3} dir={theme.direction}>
+              <ClashTab />
+            </TabPanel>
+            <Grid item xs={12} style={{ marginBottom: '10px' }}>
+              <PurchaseOrder orderType={value} />
             </Grid>
           </Grid>
-        </Container>
-      </div>
+        </Grid>
+      </Container>
       <Footer />
     </div>
   );
 };
 
-export default Purchase;
+export default React.memo(Purchase);

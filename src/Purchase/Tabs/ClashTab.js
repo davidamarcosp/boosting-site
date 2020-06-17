@@ -5,6 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
+import CurrentTierBadge from '../Components/CurrentTierBadge';
 import { makeStyles } from '@material-ui/core/styles';
 
 function ClashTab() {
@@ -48,9 +49,11 @@ function ClashTab() {
     }
   };
 
-
   return (
     <Grid container>
+      <Grid item xs={12} style={{ height: '200px' }}>
+        <CurrentTierBadge />
+      </Grid>
       <Grid item xs={12}>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="demo-simple-select-outlined-label">Team Tier</InputLabel>
@@ -61,10 +64,10 @@ function ClashTab() {
             onChange={handleTeamTierChange}
             label="Team Tier"
           >
-            <MenuItem value={4}>IV</MenuItem>
-            <MenuItem value={3}>III</MenuItem>
-            <MenuItem value={2}>II</MenuItem>
-            <MenuItem value={1}>I</MenuItem>
+            <MenuItem value={0}>IV</MenuItem>
+            <MenuItem value={1}>III</MenuItem>
+            <MenuItem value={3}>II</MenuItem>
+            <MenuItem value={4}>I</MenuItem>
           </Select>
         </FormControl>
       </Grid>

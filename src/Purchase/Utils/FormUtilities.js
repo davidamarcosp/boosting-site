@@ -1,113 +1,113 @@
 import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const getDesiredTier = (tier, division) => {
-  if (tier === 1) {
-    if (division === 1) {
+const getDesiredTier = (currentTier, currentDivision) => {
+  if (currentTier === 0) {
+    if (currentDivision === 3) {
       return [
-        <MenuItem value={2}>Bronze</MenuItem>,
-        <MenuItem value={3}>Silver</MenuItem>,
-        <MenuItem value={4}>Gold</MenuItem>,
-        <MenuItem value={5}>Platinum</MenuItem>,
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={1} value={1}>Bronze</MenuItem>,
+        <MenuItem key={2} value={2}>Silver</MenuItem>,
+        <MenuItem key={3} value={3}>Gold</MenuItem>,
+        <MenuItem key={4} value={4}>Platinum</MenuItem>,
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     } else {
       return [
-        <MenuItem value={1}>Iron</MenuItem>,
-        <MenuItem value={2}>Bronze</MenuItem>,
-        <MenuItem value={3}>Silver</MenuItem>,
-        <MenuItem value={4}>Gold</MenuItem>,
-        <MenuItem value={5}>Platinum</MenuItem>,
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={0} value={0}>Iron</MenuItem>,
+        <MenuItem key={1} value={1}>Bronze</MenuItem>,
+        <MenuItem key={2} value={2}>Silver</MenuItem>,
+        <MenuItem key={3} value={3}>Gold</MenuItem>,
+        <MenuItem key={4} value={4}>Platinum</MenuItem>,
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     }
-  } else if (tier === 2) {
-    if (division === 1) {
+  } else if (currentTier === 1) {
+    if (currentDivision === 3) {
       return [
-        <MenuItem value={3}>Silver</MenuItem>,
-        <MenuItem value={4}>Gold</MenuItem>,
-        <MenuItem value={5}>Platinum</MenuItem>,
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={2} value={2}>Silver</MenuItem>,
+        <MenuItem key={3} value={3}>Gold</MenuItem>,
+        <MenuItem key={4} value={4}>Platinum</MenuItem>,
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     } else {
       return [
-        <MenuItem value={2}>Bronze</MenuItem>,
-        <MenuItem value={3}>Silver</MenuItem>,
-        <MenuItem value={4}>Gold</MenuItem>,
-        <MenuItem value={5}>Platinum</MenuItem>,
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={1} value={1}>Bronze</MenuItem>,
+        <MenuItem key={2} value={2}>Silver</MenuItem>,
+        <MenuItem key={3} value={3}>Gold</MenuItem>,
+        <MenuItem key={4} value={4}>Platinum</MenuItem>,
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     }
-  } else if (tier === 3) {
-    if (division === 1) {
+  } else if (currentTier === 2) {
+    if (currentDivision === 3) {
       return [
-        <MenuItem value={4}>Gold</MenuItem>,
-        <MenuItem value={5}>Platinum</MenuItem>,
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={3} value={3}>Gold</MenuItem>,
+        <MenuItem key={4} value={4}>Platinum</MenuItem>,
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     } else {
       return [
-        <MenuItem value={3}>Silver</MenuItem>,
-        <MenuItem value={4}>Gold</MenuItem>,
-        <MenuItem value={5}>Platinum</MenuItem>,
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={2} value={2}>Silver</MenuItem>,
+        <MenuItem key={3} value={3}>Gold</MenuItem>,
+        <MenuItem key={4} value={4}>Platinum</MenuItem>,
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     }
-  } else if (tier === 4) {
-    if (division === 1) {
+  } else if (currentTier === 3) {
+    if (currentDivision === 3) {
       return [
-        <MenuItem value={5}>Platinum</MenuItem>,
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={4} value={4}>Platinum</MenuItem>,
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     } else {
       return [
-        <MenuItem value={4}>Gold</MenuItem>,
-        <MenuItem value={5}>Platinum</MenuItem>,
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={3} value={3}>Gold</MenuItem>,
+        <MenuItem key={4} value={4}>Platinum</MenuItem>,
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     }
-  } else if (tier === 5) {
-    if (division === 1) {
+  } else if (currentTier === 4) {
+    if (currentDivision === 3) {
       return [
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     } else {
       return [
-        <MenuItem value={5}>Platinum</MenuItem>,
-        <MenuItem value={6}>Diamond</MenuItem>
+        <MenuItem key={4} value={4}>Platinum</MenuItem>,
+        <MenuItem key={5} value={5}>Diamond</MenuItem>
       ];
     }
-  } else if (tier === 6) {
+  } else if (currentTier === 5) {
     return [
-      <MenuItem value={6}>Diamond</MenuItem>
+      <MenuItem key={5} value={5}>Diamond</MenuItem>
     ];
   };
 };
 
-const getDesiredDivision = (tier, finalTier, division) => {
-  if (tier === finalTier) {
-    if (division === 2) {
+const getDesiredDivision = (currentTier, desiredTier, currentDivision) => {
+  if (currentTier === desiredTier) {
+    if (currentDivision === 2) {
       return [
-        <MenuItem value={1}>I</MenuItem>
+        <MenuItem key={3} value={3}>I</MenuItem>
       ];
-    } else if (division === 3) {
+    } else if (currentDivision === 1) {
       return [
-        <MenuItem value={1}>I</MenuItem>,
-        <MenuItem value={2}>II</MenuItem>
+        <MenuItem key={3} value={3}>I</MenuItem>,
+        <MenuItem key={2} value={2}>II</MenuItem>
       ];
-    } else if (division === 4) {
+    } else if (currentDivision === 0) {
       return [
-        <MenuItem value={1}>I</MenuItem>,
-        <MenuItem value={2}>II</MenuItem>,
-        <MenuItem value={3}>III</MenuItem>
+        <MenuItem key={3} value={3}>I</MenuItem>,
+        <MenuItem key={2} value={2}>II</MenuItem>,
+        <MenuItem key={1} value={1}>III</MenuItem>
       ];
     };
   } else {
     return [
-      <MenuItem value={1}>I</MenuItem>,
-      <MenuItem value={2}>II</MenuItem>,
-      <MenuItem value={3}>III</MenuItem>,
-      <MenuItem value={4}>IV</MenuItem>
+      <MenuItem key={3} value={3}>I</MenuItem>,
+      <MenuItem key={2} value={2}>II</MenuItem>,
+      <MenuItem key={1} value={1}>III</MenuItem>,
+      <MenuItem key={0} value={0}>IV</MenuItem>
     ];
   };
 };

@@ -88,17 +88,17 @@ function Navbar(props) {
                   <ClickAwayListener onClickAway={handleClose}>
                     <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                       <MenuItem onClick={handleClose}>
-                        <Typography align="center" onClick={() => props.history.push('/services/order-now')}>
+                        <Typography component={'span'} align="center" onClick={() => props.history.push('/services/order-now')}>
                           Solo Q Boosting
                         </Typography>
                       </MenuItem>
                       <MenuItem onClick={handleClose}>
-                        <Typography align="center" onClick={() => props.history.push('/services/order-now')}>
+                        <Typography component={'span'} align="center" onClick={() => props.history.push('/services/order-now')}>
                           Duo Q Boosting
                         </Typography>
                       </MenuItem>
                       <MenuItem onClick={handleClose} style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography onClick={() => props.history.push('/services/order-now')}>
+                        <Typography component={'span'} onClick={() => props.history.push('/services/order-now')}>
                           LoL Coaching
                         </Typography>
                       </MenuItem>
