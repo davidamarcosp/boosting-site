@@ -1,21 +1,15 @@
 import React from 'react';
 import useCurrentTierState from './useCurrentTierState';
 import useCurrentDivisionState from './useCurrentDivisionState';
-import useCurrentLPState from './useCurrentLPState';
 import useDesiredTierState from './useDesiredTierState';
 import useDesiredDivisionState from './useDesiredDivisionState';
-import useQueueTypeState from './useQueueTypeState';
-import useNumberGames from './useNumberGames';
 
-const useDivisionState = () => {
+const useTierAndDivisionState = () => {
 
   const { currentTier, setCurrentTier } = useCurrentTierState(2);
   const { currentDivision, setCurrentDivision } = useCurrentDivisionState(3);
-  const { currentLP, setCurrentLP } = useCurrentLPState(0);
   const { desiredTier, setDesiredTier } = useDesiredTierState(3);
   const { desiredDivision, setDesiredDivision } = useDesiredDivisionState(0);
-  const { queueType, setQueueType } = useQueueTypeState("Division");
-  const { numberOfGames, setNumberOfGames } = useNumberGames(1);
 
   React.useEffect(() => {
     if (currentTier === 5 && currentDivision === 3) {
@@ -39,7 +33,7 @@ const useDivisionState = () => {
       desiredTier,
       setDesiredTier,
       desiredDivision,
-      setDesiredDivision
+      setDesiredDivision,
     ]
   );
 
@@ -51,10 +45,6 @@ const useDivisionState = () => {
     setCurrentDivision(event.target.value);
   };
 
-  const handleCurrentLPChange = event => {
-    setCurrentLP(event.target.value);
-  };
-
   const handleDesiredTierChange = event => {
     setDesiredTier(event.target.value);
   };
@@ -63,35 +53,17 @@ const useDivisionState = () => {
     setDesiredDivision(event.target.value);
   };
 
-  const handleQueueTypeChange = event => {
-    setQueueType(event.target.value);
-  };
-
-  const handleNumberOfGamesChange = event => {
-    if (event.target.value > 10) {
-      setNumberOfGames(10);
-    } else {
-      setNumberOfGames(event.target.value);
-    }
-  };
-
   return {
     currentTier,
     handleCurrentTierChange,
     currentDivision,
     handleCurrentDivisionChange,
-    currentLP,
-    handleCurrentLPChange,
     desiredTier,
     handleDesiredTierChange,
     desiredDivision,
     handleDesiredDivisionChange,
-    queueType,
-    handleQueueTypeChange,
-    numberOfGames,
-    handleNumberOfGamesChange
   };
 
 }
 
-export default useDivisionState;
+export default useTierAndDivisionState;

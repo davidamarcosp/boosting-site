@@ -1,49 +1,37 @@
 import React, { createContext } from "react";
 
-import useOrderState from '../../Purchase/Hooks/useOrderState';
+import useTierAndDivisionState from '../../Purchase/Hooks/useTierAndDivisionState';
 
-export const PurchaseContext = createContext();
+export const TierAndDivisionContext = createContext();
 
-export const PurchaseProvider = (props) => {
+export const TierAndDivisionProvider = (props) => {
 
   const {
     currentTier,
     handleCurrentTierChange,
     currentDivision,
     handleCurrentDivisionChange,
-    currentLP,
-    handleCurrentLPChange,
     desiredTier,
     handleDesiredTierChange,
     desiredDivision,
     handleDesiredDivisionChange,
-    queueType,
-    handleQueueTypeChange,
-    numberOfGames,
-    handleNumberOfGamesChange,
-  } = useOrderState();
+  } = useTierAndDivisionState();
 
   return (
-    <PurchaseContext.Provider
+    <TierAndDivisionContext.Provider
       value={{
         currentTier,
         handleCurrentTierChange,
         currentDivision,
         handleCurrentDivisionChange,
-        currentLP,
-        handleCurrentLPChange,
         desiredTier,
         handleDesiredTierChange,
         desiredDivision,
         handleDesiredDivisionChange,
-        queueType,
-        handleQueueTypeChange,
-        numberOfGames,
-        handleNumberOfGamesChange,
       }}
     >
       {props.children}
-    </PurchaseContext.Provider>
+    </TierAndDivisionContext.Provider>
   );
 
 };

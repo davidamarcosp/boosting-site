@@ -4,9 +4,13 @@ function useCurrentLPState (initialValue) {
 
   const [currentLP, setCurrentLP] = React.useState(initialValue);
 
+  const handleCurrentLPChange = event => {
+    setCurrentLP(event.target.value);
+  };
+
   return {
     currentLP,
-    setCurrentLP
+    handleCurrentLPChange
   };
 
 };

@@ -3,6 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/storage";
+import { v4 as uuidv4 } from 'uuid';
 
 const config = {
   apiKey: "AIzaSyCt1wlWGNtBooYoeg4ep4THMM_eI1aLWuU",
@@ -25,7 +26,11 @@ class Firebase {
     this.storage = app.storage();
   };
 
+  // AUTH MOD
+
   doAuthListener = (fn) => this.auth.onAuthStateChanged(fn);
+
+  // STORAGE MOD
 
   getBadgeImage = (queueType, tier, division) => {
 
@@ -65,6 +70,17 @@ class Firebase {
       return badgeImageRef.getDownloadURL();
 
     };
+
+  };
+
+  // DB MOD
+
+  doRegisterOrder = () => {
+
+    const username = this.auth.currentUser.displayName;
+    const user_id = this.auth.currentUser.uid;
+    const order_id = uuidv4();
+    const created_at = new Date();
 
   };
 

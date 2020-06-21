@@ -4,7 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import { getDesiredTier } from '../Utils/FormUtilities';
-import { PurchaseContext } from '../../Common/Context/PurchaseContext';
+import { TierAndDivisionContext } from '../../Common/Context/TierAndDivisionContext';
 
 function DesiredTierForm() {
 
@@ -29,7 +29,9 @@ function DesiredTierForm() {
     currentDivision,
     desiredTier,
     handleDesiredTierChange,
-  } = React.useContext(PurchaseContext);
+  } = React.useContext(TierAndDivisionContext);
+
+  console.log('RENDER DESIRED TIER FORM');
 
   return (
     <FormControl variant="outlined" className={classes.formControl}>

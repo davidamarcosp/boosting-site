@@ -4,7 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
-import { PurchaseContext } from '../../Common/Context/PurchaseContext';
+import { TierAndDivisionContext } from '../../Common/Context/TierAndDivisionContext';
 
 function CurrentDivisionForm() {
 
@@ -28,7 +28,9 @@ function CurrentDivisionForm() {
     currentTier,
     currentDivision,
     handleCurrentDivisionChange,
-  } = React.useContext(PurchaseContext);
+  } = React.useContext(TierAndDivisionContext);
+
+  console.log('RENDER CURRENT DIVISION FORM');
 
   return (
     <FormControl variant="outlined" className={classes.formControl}>

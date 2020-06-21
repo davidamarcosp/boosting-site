@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { PurchaseContext } from '../../Common/Context/PurchaseContext';
+import { NumberOfGamesContext } from '../../Common/Context/NumberOfGamesContext';
 
 function NumberOfGamesForm() {
 
@@ -19,8 +19,10 @@ function NumberOfGamesForm() {
     },
   }));
 
-  const { numberOfGames, handleNumberOfGamesChange } = React.useContext(PurchaseContext);
+  const { numberOfGames, handleNumberOfGamesChange } = React.useContext(NumberOfGamesContext);
   const classes = useStyles();
+
+  console.log('RENDER NUMBER OF GAMES FORM');
 
   return (
     <TextField

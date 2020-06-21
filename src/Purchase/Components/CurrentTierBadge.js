@@ -1,11 +1,13 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { PurchaseContext } from '../../Common/Context/PurchaseContext';
+import { TierAndDivisionContext } from '../../Common/Context/TierAndDivisionContext';
+import { QueueTypeContext } from '../../Common/Context/QueueTypeContext';
 import Firebase from '../../Firebase';
 
 function CurrentTierBadge() {
 
-  const { queueType, currentTier, currentDivision } = React.useContext(PurchaseContext);
+  const { currentTier, currentDivision } = React.useContext(TierAndDivisionContext);
+  const { queueType } = React.useContext(QueueTypeContext);
   const [tierImageUrl, setTierImageUrl] = React.useState(null);
 
   React.useEffect(() => {

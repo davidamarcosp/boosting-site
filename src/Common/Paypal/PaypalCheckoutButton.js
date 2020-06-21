@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import paypal from 'paypal-checkout';
+import axios from 'axios';
+import { AuthContext } from '../Context/AuthContext';
 
-const PaypalCheckoutButton = ({ order }) => {
+const PaypalCheckoutButton = ({ order, asd }) => {
+
+  const { authUser, setAuthUserPaymentSuccesful } = React.useContext(AuthContext);
 
   const paypalConf = {
     currency: 'USD',
@@ -49,23 +53,35 @@ const PaypalCheckoutButton = ({ order }) => {
   const onAuthorize = (data, actions) => {
     return actions.payment.execute()
       .then(response => {
-        console.log(response);
-        alert(`El Pago fue procesado correctamente, ID: ${response.id}`)
+        console.log('Paypal Success: ', response);
+        setAuthUserPaymentSuccesful(true);
+      })
+      .then(() => {
+        axios({
+          url: 'https://us-central1-boosting-site.cloudfunctions.net/ReceiptEmail',
+          method: 'GET',
+          params: { dest: authUser.email }
+        })
+          .then(() => {
+            console.log('Payment success mail sent');
+          })
+          .catch((err) => {
+            console.log(err)
+          });
       })
       .catch(error => {
         console.log(error);
-	      alert('Ocurrió un error al procesar el pago con Paypal');
+        alert('Ocurrió un error al procesar el pago con Paypal');
       });
   };
 
   const onError = (error) => {
-    alert ('El pago con PayPal no fue realizado, vuelva a intentarlo.' );
+    alert('El pago con PayPal no fue realizado, vuelva a intentarlo.');
   };
 
   const onCancel = (data, actions) => {
-    alert( 'El pago con PayPal no fue realizado, el usuario canceló el proceso.' );
+    alert('El pago con PayPal no fue realizado, el usuario canceló el proceso.');
   };
-
 
   return (
     <PayPalButton

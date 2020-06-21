@@ -5,7 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { PurchaseContext } from '../../Common/Context/PurchaseContext';
+import { QueueTypeContext } from '../../Common/Context/QueueTypeContext';
 import CurrentTierBadge from '../Components/CurrentTierBadge';
 import DesiredTierBadge from '../Components/DesiredTierBadge';
 import CurrentTierForm from '../Components/CurrentTierForm';
@@ -36,7 +36,7 @@ function SoloQueueTab() {
   const {
     queueType,
     handleQueueTypeChange
-  } = React.useContext(PurchaseContext);
+  } = React.useContext(QueueTypeContext);
 
   const getSection = (queueType) => {
     if (queueType === "Division") return divisionSection;
@@ -99,6 +99,7 @@ function SoloQueueTab() {
   const normalGameSection = (
     <Grid container>
       <Grid item xs={12} style={{ height: '200px' }}>
+        <CurrentTierBadge />
       </Grid>
       <Grid item xs={12}>
         <NumberOfGamesForm />
@@ -106,7 +107,7 @@ function SoloQueueTab() {
     </Grid>
   );
 
-  console.log('RENDER SOLO QUEUE');
+  console.log('RENDER SOLO Q TAB');
 
   return (
     <Grid container>
@@ -132,4 +133,4 @@ function SoloQueueTab() {
   );
 };
 
-export default React.memo(SoloQueueTab);
+export default SoloQueueTab;

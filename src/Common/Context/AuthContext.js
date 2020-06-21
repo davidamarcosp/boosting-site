@@ -6,6 +6,7 @@ export const AuthContext = React.createContext();
 export const AuthProvider = props => {
 
   const [authUser, setAuthUser] = React.useState(null);
+  const [authUserPaymentSuccesful, setAuthUserPaymentSuccesful] = React.useState(false);
 
   React.useEffect(() => {
     Firebase.doAuthListener(user => {
@@ -22,7 +23,9 @@ export const AuthProvider = props => {
   return (
     <AuthContext.Provider
       value={{
-        authUser
+        authUser,
+        authUserPaymentSuccesful,
+        setAuthUserPaymentSuccesful
       }}
     >
       {props.children}

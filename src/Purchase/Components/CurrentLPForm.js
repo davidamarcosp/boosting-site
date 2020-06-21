@@ -4,7 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
-import { PurchaseContext } from '../../Common/Context/PurchaseContext';
+import { CurrentLPContext } from '../../Common/Context/CurrentLPContext';
 
 function CurrentLPForm() {
 
@@ -27,7 +27,7 @@ function CurrentLPForm() {
   const {
     currentLP,
     handleCurrentLPChange
-  } = React.useContext(PurchaseContext);
+  } = React.useContext(CurrentLPContext);
 
   return (
     <FormControl variant="outlined" className={classes.formControl}>
