@@ -3,19 +3,25 @@ import { TierAndDivisionProvider } from './TierAndDivisionContext';
 import { CurrentLPProvider } from './CurrentLPContext';
 import { QueueTypeProvider } from './QueueTypeContext';
 import { NumberOfGamesProvider } from './NumberOfGamesContext';
+import { RegionProvider } from './RegionContext';
+import { ExtrasProvider } from './ExtrasContext';
 
-function AsdContextProvider(props) {
+function PurchaseContextProvider(props) {
   return (
-    <TierAndDivisionProvider>
-      <QueueTypeProvider>
-        <NumberOfGamesProvider>
-          <CurrentLPProvider>
-            {props.children}
-          </CurrentLPProvider>
-        </NumberOfGamesProvider>
-      </QueueTypeProvider>
-    </TierAndDivisionProvider>
+    <ExtrasProvider>
+      <TierAndDivisionProvider>
+        <RegionProvider>
+          <QueueTypeProvider>
+            <NumberOfGamesProvider>
+              <CurrentLPProvider>
+                {props.children}
+              </CurrentLPProvider>
+            </NumberOfGamesProvider>
+          </QueueTypeProvider>
+        </RegionProvider>
+      </TierAndDivisionProvider>
+    </ExtrasProvider>
   );
 };
 
-export default AsdContextProvider;
+export default PurchaseContextProvider;

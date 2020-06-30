@@ -22,18 +22,26 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PersonIcon from '@material-ui/icons/Person';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Toolbar from '@material-ui/core/Toolbar';
 import Logo from '../../Landing/Logo.jpg';
 import useStyles from './NavbarStyles';
+import SignUp from '../../SignUp/SignUp';
+import SignIn from '../../SignIn/SignIn';
+import { AuthContext } from '../Context/AuthContext';
 import { withRouter } from 'react-router';
+import Dialog from '@material-ui/core/Dialog';
 
 function Navbar(props) {
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [isDialogOpen, setDialogOpen] = React.useState(false);
+  const { authUser } = React.useContext(AuthContext);
   const anchorRef = React.useRef(null);
   const prevOpen = React.useRef(open);
+  const authRef = React.useRef(true);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -53,8 +61,12 @@ function Navbar(props) {
     };
   };
 
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
   const logoNavbar = (
-    <Avatar alt="Logo" src={Logo} className={classes.Logo} onClick={() => props.history.push('/')}/>
+    <Avatar alt="Logo" src={Logo} className={classes.Logo} onClick={() => props.history.push('/')} />
   );
 
   const desktopNavbar = (
@@ -110,14 +122,27 @@ function Navbar(props) {
           </Popper>
         </div>
       </Breadcrumbs>
-      <Button
-        variant="outlined"
-        size="small"
-        color="primary"
-        startIcon={<PersonIcon />}
-      >
-        Members Area
-      </Button>
+      {
+        authUser
+          ? <Button
+            variant="outlined"
+            size="small"
+            color="primary"
+            startIcon={<AccountCircleIcon />}
+            onClick={() => props.history.push("/dashboard")}
+          >
+            Dashboard
+            </Button>
+          : <Button
+            variant="outlined"
+            size="small"
+            color="primary"
+            startIcon={<PersonIcon />}
+            onClick={() => setDialogOpen(true)}
+          >
+            Members Area
+            </Button>
+      }
     </div>
   );
 
@@ -194,6 +219,13 @@ function Navbar(props) {
         </Toolbar>
       </Container>
       {isMobileMenuOpen && mobileMenu}
+      <Dialog open={isDialogOpen} onClose={handleDialogClose} aria-labelledby="form-dialog-title" >
+        {
+          authRef.current
+            ? <SignIn authRef={authRef} />
+            : <SignUp authRef={authRef} />
+        }
+      </Dialog>
     </AppBar>
   );
 };

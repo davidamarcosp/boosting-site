@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import paypal from 'paypal-checkout';
 import axios from 'axios';
 import { AuthContext } from '../Context/AuthContext';
+import Firebase from '../../Firebase';
 
-const PaypalCheckoutButton = ({ order, asd }) => {
+const PaypalCheckoutButton = ({ order }) => {
 
   const { authUser, setAuthUserPaymentSuccesful } = React.useContext(AuthContext);
 
@@ -55,6 +56,7 @@ const PaypalCheckoutButton = ({ order, asd }) => {
       .then(response => {
         console.log('Paypal Success: ', response);
         setAuthUserPaymentSuccesful(true);
+        Firebase.doRegisterOrder(response, order.description);
       })
       .then(() => {
         axios({

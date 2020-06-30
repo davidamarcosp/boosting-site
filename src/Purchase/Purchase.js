@@ -3,56 +3,25 @@ import Navbar from '../Common/Navbar/Navbar';
 import Footer from '../Common/Footer/Footer';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
 import SoloQueueTab from './Tabs/SoloQueueTab';
 import PlacementTab from './Tabs/PlacementTab';
 import ClashTab from './Tabs/ClashTab';
 import PurchaseOrder from './Utils/PurchaseOrder';
 import LiveChat from '../Common/Zendesk/LiveChat';
-
-//
 import { CurrentLPProvider } from '../Common/Context/CurrentLPContext';
+import TabPanel from '@material-ui/lab/TabPanel';
+import TabContext from '@material-ui/lab/TabContext';
 
-const TabPanel = (props) => {
-  const { children, value, index, ...other } = props;
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>{children}</Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
-const a11yProps = (index) => {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
 
 function Purchase() {
 
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState("SOLO_QUEUE");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -67,33 +36,35 @@ function Purchase() {
         <Grid container style={{ marginTop: '3rem' }}>
           <CurrentLPProvider>
             <Grid item xs={12} md={9} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-              <AppBar position="static" color="default">
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  indicatorColor="primary"
-                  textColor="primary"
-                  variant="fullWidth"
-                  aria-label="full width tabs example"
-                >
-                  <Tab label="Solo Queue" {...a11yProps(0)} />
-                  <Tab label="Duo Queue" {...a11yProps(1)} />
-                  <Tab label="Placements" {...a11yProps(2)} />
-                  <Tab label="Clash (soon)" {...a11yProps(3)} disabled />
-                </Tabs>
-              </AppBar>
-              <TabPanel value={value} index={0} dir={theme.direction}>
-                <SoloQueueTab />
-              </TabPanel>
-              <TabPanel value={value} index={1} dir={theme.direction}>
-                <SoloQueueTab />
-              </TabPanel>
-              <TabPanel value={value} index={2} dir={theme.direction}>
-                <PlacementTab />
-              </TabPanel>
-              <TabPanel value={value} index={3} dir={theme.direction}>
-                <ClashTab />
-              </TabPanel>
+              <TabContext value={value}>
+                <AppBar position="static" color="default">
+                  <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    variant="fullWidth"
+                    aria-label="full width tabs example"
+                  >
+                    <Tab label="Solo Queue" value="SOLO_QUEUE" />
+                    <Tab label="Duo Queue" value="DUO_QUEUE" />
+                    <Tab label="Placements" value="PLACEMENT" />
+                    <Tab label="Clash (soon)" value="CLASH" disabled />
+                  </Tabs>
+                </AppBar>
+                <TabPanel value="SOLO_QUEUE" dir={theme.direction}>
+                  <SoloQueueTab />
+                </TabPanel>
+                <TabPanel value="DUO_QUEUE" dir={theme.direction}>
+                  <SoloQueueTab />
+                </TabPanel>
+                <TabPanel value="PLACEMENT" dir={theme.direction}>
+                  <PlacementTab />
+                </TabPanel>
+                <TabPanel value="CLASH" dir={theme.direction}>
+                  <ClashTab />
+                </TabPanel>
+              </TabContext>
               <Grid item xs={12} style={{ marginBottom: '10px' }}>
                 <PurchaseOrder orderType={value} />
               </Grid>
@@ -107,4 +78,4 @@ function Purchase() {
   );
 };
 
-export default React.memo(Purchase);
+export default Purchase;

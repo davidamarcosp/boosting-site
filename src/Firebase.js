@@ -24,11 +24,39 @@ class Firebase {
     this.db = app.firestore();
     this.functions = app.functions();
     this.storage = app.storage();
+    this.db.enablePersistence()
   };
 
   // AUTH MOD
 
   doAuthListener = (fn) => this.auth.onAuthStateChanged(fn);
+
+  doSignInWithEmailAndPassword = (email, password) =>
+    this.auth.signInWithEmailAndPassword(email, password);
+
+  doCreateUserWithEmailAndPassword = (email, password) =>
+    this.auth.createUserWithEmailAndPassword(email, password);
+
+  doSendPasswordResetEmail = (email) =>
+    this.auth.sendPasswordResetEmail(email);
+
+  doRegisterUserInformation = (userObj) => {
+
+    const userID = userObj.userID;
+    const userData = userObj;
+
+    this.db.collection('users').doc(userID).set({
+      firstName: userData.firstName,
+      lastName: userData.lastName
+    });
+
+    // Setting up the Display Name
+
+    this.auth.currentUser.updateProfile({
+      displayName: `${userData.nickName}`
+    });
+
+  };
 
   // STORAGE MOD
 
@@ -75,13 +103,59 @@ class Firebase {
 
   // DB MOD
 
-  doRegisterOrder = () => {
+  doRegisterOrder = (paymentInfo, order_description) => {
 
-    const username = this.auth.currentUser.displayName;
-    const user_id = this.auth.currentUser.uid;
     const order_id = uuidv4();
-    const created_at = new Date();
 
+    this.db.collection('orders').doc(order_id).set({
+      user_id: this.auth.currentUser.uid,
+      created_at: new Date(),
+      completed: false,
+      order_description: order_description
+    }).catch((err) => console.log(err));
+
+    this.db.collection('payments').doc(uuidv4()).set({
+      paymentInfo: paymentInfo,
+      order_id: order_id,
+      user_id: this.auth.currentUser.uid
+    }).catch((err) => console.log(err));
+
+    this.db.collection('chat_sessions').doc(order_id).set({
+      participants: [this.auth.currentUser.uid],
+      participants_history: []
+    }).catch((err) => console.log(err));
+
+    this.db.collection('chat_sessions').doc(order_id).collection('messages').doc(uuidv4()).set({
+      content: 'Welcome! As soon as a booster take your order, you will be able to contact him using this chat',
+      date: new Date(),
+      sender: { id: '0000', displayName: 'Admin' }
+    }).catch((err) => console.log(err));
+
+  };
+
+  getOrder = () => {
+    return this.db.collection('orders')
+      .where("user_id", "==", this.auth.currentUser.uid)
+      .get()
+  };
+
+  getMessages = (order_id, fn) => {
+    return this.db.collection('chat_sessions')
+      .doc(order_id)
+      .collection('messages')
+      .onSnapshot(fn);
+  };
+
+  doSendChatMessage = (order_id, newMessage) => {
+    this.db.collection('chat_sessions')
+      .doc(order_id)
+      .collection('messages')
+      .doc(uuidv4())
+      .set({
+        sender: newMessage.sender,
+        date: newMessage.date,
+        content: newMessage.content
+      });
   };
 
 };

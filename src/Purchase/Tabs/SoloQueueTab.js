@@ -14,6 +14,7 @@ import CurrentLPForm from '../Components/CurrentLPForm';
 import DesiredTierForm from '../Components/DesiredTierForm';
 import DesiredDivisionForm from '../Components/DesiredDivisionForm';
 import NumberOfGamesForm from '../Components/NumberOfGamesForm';
+import RegionForm from '../Components/RegionForm';
 
 function SoloQueueTab() {
 
@@ -111,6 +112,9 @@ function SoloQueueTab() {
 
   return (
     <Grid container>
+      <Grid item xs={12}>
+        <RegionForm />
+      </Grid>
       <Grid item xs={12}>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="demo-simple-select-outlined-label">Type</InputLabel>
