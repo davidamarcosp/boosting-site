@@ -11,12 +11,10 @@ import SoloQueueTab from './Tabs/SoloQueueTab';
 import PlacementTab from './Tabs/PlacementTab';
 import ClashTab from './Tabs/ClashTab';
 import PurchaseOrder from './Utils/PurchaseOrder';
-import LiveChat from '../Common/Zendesk/LiveChat';
+// import LiveChat from '../Common/Zendesk/LiveChat';
 import { CurrentLPProvider } from '../Common/Context/CurrentLPContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 import TabContext from '@material-ui/lab/TabContext';
-
-
 
 function Purchase() {
 
@@ -71,7 +69,7 @@ function Purchase() {
             </Grid>
           </CurrentLPProvider>
         </Grid>
-        <LiveChat />
+        {/* <LiveChat /> */}
       </Container>
       <Footer />
     </div>

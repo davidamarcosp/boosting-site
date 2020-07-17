@@ -46,9 +46,9 @@ class Firebase {
     const userData = userObj;
 
     this.db.collection('users').doc(userID).set({
-      firstName: userData.firstName,
-      lastName: userData.lastName
-    });
+      nickName: userData.nickName,
+      email: userData.email
+    }).then(() => console.log("USER CREATED")).catch(err => console.log(err));
 
     // Setting up the Display Name
 
@@ -106,11 +106,13 @@ class Firebase {
   doRegisterOrder = (paymentInfo, order_description) => {
 
     const order_id = uuidv4();
+    const creation_timestamp = Date.now();
 
     this.db.collection('orders').doc(order_id).set({
       user_id: this.auth.currentUser.uid,
-      created_at: new Date(),
+      created_at: creation_timestamp,
       completed: false,
+      pause: false,
       order_description: order_description
     }).catch((err) => console.log(err));
 
@@ -127,9 +129,15 @@ class Firebase {
 
     this.db.collection('chat_sessions').doc(order_id).collection('messages').doc(uuidv4()).set({
       content: 'Welcome! As soon as a booster take your order, you will be able to contact him using this chat',
-      date: new Date(),
+      date: creation_timestamp,
       sender: { id: '0000', displayName: 'Admin' }
     }).catch((err) => console.log(err));
+
+    this.db.collection('timelines').doc(order_id).set({
+      events: [
+        { date: creation_timestamp, text: 'Your order has been placed' }
+      ]
+    });
 
   };
 
@@ -143,6 +151,7 @@ class Firebase {
     return this.db.collection('chat_sessions')
       .doc(order_id)
       .collection('messages')
+      .orderBy('date', 'asc')
       .onSnapshot(fn);
   };
 
@@ -157,6 +166,64 @@ class Firebase {
         content: newMessage.content
       });
   };
+
+  doSetCredentials = (username, password, order_id) => {
+    this.db.collection('orders').doc(order_id).update({
+      credentials: {
+        // summoner: summoner,
+        username: username,
+        password: password,
+        // encryptedAccountId: accountId,
+        saved: true
+      }
+    });
+  };
+
+  getCrendentials = (order_id) => {
+    return this.db.collection('orders').doc(order_id).get();
+  };
+
+  doSetPreferences = (order_id, roles, champions) => {
+    this.db.collection('orders').doc(order_id).update({
+      preferences: {
+        roles: roles,
+        champions: champions,
+        saved: true
+      }
+    });
+  };
+
+  getPreferences = (order_id, fn) => {
+    return this.db.collection('orders').doc(order_id).get();
+  };
+
+  //
+
+  getShit = (order_id, fn) => {
+    return this.db.collection('orders').doc(order_id).onSnapshot(fn);
+  };
+
+  handlePauseShit = (order_id, boolean) => {
+    this.db.collection('orders').doc(order_id).update({
+      pause: boolean
+    });
+  };
+
+  getTimeline = (order_id, fn) => {
+    return this.db.collection('timelines')
+      .doc(order_id)
+      .onSnapshot(fn)
+  };
+
+  setEvent = (order_id, event) => {
+    return this.db.collection('timelines')
+      .doc(order_id)
+      .update({
+        events: app.firestore.FieldValue.arrayUnion(event)
+      })
+  };
+
+  //
 
 };
 

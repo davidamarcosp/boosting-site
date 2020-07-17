@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import NumberOfGamesForm from '../Components/NumberOfGamesForm';
 import CurrentTierForm from '../Components/CurrentTierForm';
 import CurrentTierBadge from '../Components/CurrentTierBadge';
+import RegionForm from '../Components/RegionForm';
 
 function PlacementTab() {
 
@@ -10,6 +11,9 @@ function PlacementTab() {
     <Grid container>
       <Grid item xs={12} style={{ height: '200px' }}>
         <CurrentTierBadge />
+      </Grid>
+      <Grid item xs={12}>
+        <RegionForm />
       </Grid>
       <Grid item xs={12}>
         <CurrentTierForm />

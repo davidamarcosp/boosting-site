@@ -1,31 +1,32 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Messages from './Messages';
 import NewMessageInput from './NewMessageInput';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   text: {
     padding: theme.spacing(2, 2, 0),
+  },
+  chatWindow: {
+    height: '400px',
+    overflowY: 'auto',
+    marginBottom: '10px'
   }
 }));
 
 function Messenger(props) {
 
   const classes = useStyles();
-  const { messages, order_id, authUser } = props;
+  const { order_id, authUser } = props;
 
   return (
-    <React.Fragment>
-      <Typography className={classes.text} variant="h5" gutterBottom>
-        Chat
-      </Typography>
-      <Paper square>
-        <Messages messages={messages} authUser={authUser} />
+    <>
+      <Paper className={classes.chatWindow} elevation={5}>
+        <Messages authUser={authUser} order_id={order_id} />
       </Paper>
       <NewMessageInput order_id={order_id} />
-    </React.Fragment>
+    </>
   );
 }
 

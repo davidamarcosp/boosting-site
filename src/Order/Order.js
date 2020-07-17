@@ -1,39 +1,127 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import Grid from '@material-ui/core/Grid';
 import Firebase from '../Firebase';
 import { withRouter } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Messenger from './Components/Messenger';
 import { AuthContext } from '../Common/Context/AuthContext';
 import Navbar from '../Common/Navbar/Navbar';
+import TabPanel from '@material-ui/lab/TabPanel';
+import TabContext from '@material-ui/lab/TabContext';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import ChampionsAndRolesTab from './Tabs/ChampionsAndRolesTab';
+import AccountInfoTab from './Tabs/AccountInfoTab';
+import Footer from '../Common/Footer/Footer';
+import { PreferencesProvider } from './Hooks/PreferencesContext';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
+import OrderDetails from './Components/OrderDetails';
+// import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+// import Paper from '@material-ui/core/Paper';
+import OrderTimeline from './Components/OrderTimeline'
+
+const useStyles = makeStyles((theme) => ({
+  ChampionAndRolesTab: {
+    padding: '20px 0px',
+    [theme.breakpoints.up('md')]: {
+      padding: '24px',
+    }
+  },
+  ChampionAndRolesInfoIcon: {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    left: '95%',
+    color: 'gray'
+  }
+}));
 
 function Order(props) {
 
+  const classes = useStyles();
   const order_id = props.match.params.id;
-  const { authUser } = React.useContext(AuthContext);
-  const [messages, setMessages] = React.useState([]);
+  const [isAvailable, setAvailable] = useState(true);
+  const [value, setValue] = useState("SOLO_QUEUE");
+  const { authUser } = useContext(AuthContext);
 
-  React.useEffect(() => {
-    Firebase.getMessages(order_id, onSnapshot => {
-      onSnapshot.docChanges().forEach(change => {
-        console.log(change.doc.data());
-        var source = onSnapshot.metadata.fromCache ? "local cache" : "server";
-        console.log("Data came from " + source);
-        setMessages(st => [...st, change.doc.data()]);
-      });
-    })
-  }, [order_id]);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  useEffect(() => {
+    Firebase.getPreferences(order_id)
+      .then((doc) => {
+        if (doc.exists) {
+          if (doc.data().order_description.extras.champAndRoles) {
+            setAvailable(false);
+          };
+        };
+      }).catch(err => console.log(err));
+  }, [order_id, authUser]);
+
+  console.log("RENDER");
 
   return (
     <div>
       <Navbar />
-      <Container maxWidth="lg">
-        <Messenger
-          messages={messages}
-          authUser={authUser}
-          order_id={order_id}
-        />
+      <Container component="main" maxWidth="lg" disableGutters={true}>
+        {/* <Paper> */}
+        <Grid container justify="space-evenly" style={{ marginTop: '3rem' }}>
+          <Grid item xs={12} md={3}>
+            <OrderDetails order_id={order_id} />
+          </Grid>
+          <Grid item xs={12} md={7}>
+            <TabContext value={value}>
+              <AppBar position="static" color="default">
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  variant="fullWidth"
+                  aria-label="full width tabs example"
+                >
+                  <Tab label="Account Info" value="SOLO_QUEUE" />
+                  <Tab label="Champions and Roles" value="DUO_QUEUE" disabled={isAvailable} />
+                  {
+                    isAvailable &&
+                    <Tooltip title="Not available in this order">
+                      <InfoOutlinedIcon className={classes.ChampionAndRolesInfoIcon} />
+                    </Tooltip>
+                  }
+                </Tabs>
+              </AppBar>
+              {/* <Paper style={{ marginTop: '-10px', zIndex: '-10' }}> */}
+              <TabPanel value="SOLO_QUEUE">
+                <AccountInfoTab order_id={order_id} />
+              </TabPanel>
+              {/* </Paper> */}
+              <TabPanel value="DUO_QUEUE" classes={{ root: classes.ChampionAndRolesTab }}>
+                <PreferencesProvider>
+                  <ChampionsAndRolesTab order_id={order_id} />
+                </PreferencesProvider>
+              </TabPanel>
+            </TabContext>
+          </Grid>
+        </Grid>
+        {/* </Paper> */}
+        <Grid container justify="space-evenly">
+          <Grid item xs={11} md={3}>
+            <OrderTimeline order_id={order_id} />
+          </Grid>
+          <Grid item xs={11} md={7}>
+            <Messenger
+              authUser={authUser}
+              order_id={order_id}
+            />
+          </Grid>
+        </Grid>
       </Container>
-    </div>
+      <Footer />
+    </div >
   );
 }
 

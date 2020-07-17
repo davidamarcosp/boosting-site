@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 // import Grid from '@material-ui/core/Grid';
 import { withRouter } from 'react-router-dom';
 import Navbar from '../Common/Navbar/Navbar';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,19 +73,24 @@ function Dashboard(props) {
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center" style={{ width: '33%' }}>Date</TableCell>
-                <TableCell align="center" style={{ width: '33%' }}>Order Type</TableCell>
-                <TableCell align="center" style={{ width: '33%' }}>Type</TableCell>
+                <TableCell align="center" style={{ width: '25%' }}>Date</TableCell>
+                <TableCell align="center" style={{ width: '25%' }}>Region</TableCell>
+                <TableCell align="center" style={{ width: '25%' }}>Order Type</TableCell>
+                <TableCell align="center" style={{ width: '25%' }}>Type</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {activeOrders !== undefined && activeOrders.map((order, i) => (
-                <TableRow hover key={i} onClick={() => props.history.push(`/order/${order.id}`)}>
-                  <TableCell align="center">{order.data.created_at.seconds}</TableCell>
+              {activeOrders !== undefined && activeOrders.map((order, i) => {
+
+                let dateString = moment.unix(order.data.created_at / 1000).format("DD/MM/YYYY hh:mm A");
+
+                return (<TableRow hover key={i} onClick={() => props.history.push(`/order/${order.id}`)}>
+                  <TableCell align="center">{dateString}</TableCell>
+                  <TableCell align="center">{order.data.order_description.region}</TableCell>
                   <TableCell align="center">{order.data.order_description.orderType}</TableCell>
                   <TableCell align="center">{order.data.order_description.queueType}</TableCell>
-                </TableRow>
-              ))}
+                </TableRow>)
+              })}
             </TableBody>
           </Table>
         </TableContainer>
@@ -94,15 +100,17 @@ function Dashboard(props) {
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center" style={{ width: '33%' }}>Date</TableCell>
-                <TableCell align="center" style={{ width: '33%' }}>Order Type</TableCell>
-                <TableCell align="center" style={{ width: '33%' }}>Type</TableCell>
+                <TableCell align="center" style={{ width: '25%' }}>Date</TableCell>
+                <TableCell align="center" style={{ width: '25%' }}>Region</TableCell>
+                <TableCell align="center" style={{ width: '25%' }}>Order Type</TableCell>
+                <TableCell align="center" style={{ width: '25%' }}>Type</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {completedOrders !== undefined && completedOrders.map((order, i) => (
                 <TableRow key={i}>
-                  <TableCell align="center">{order.data.created_at.seconds}</TableCell>
+                  <TableCell align="center">{order.data.created_at}</TableCell>
+                  <TableCell align="center">{order.data.order_description.region}</TableCell>
                   <TableCell align="center">{order.data.order_description.orderType}</TableCell>
                   <TableCell align="center">{order.data.order_description.queueType}</TableCell>
                 </TableRow>

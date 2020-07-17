@@ -17,7 +17,7 @@ const PaypalCheckoutButton = ({ order }) => {
       production: '',
     },
     style: {
-      label: 'pay',
+      label: 'paypal',
       size: 'medium', // small | medium | large | responsive
       shape: 'pill',   // pill | rect
       color: 'gold',  // gold | blue | silver | black

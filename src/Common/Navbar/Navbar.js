@@ -3,12 +3,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Button from '@material-ui/core/Button';
-import Popper from '@material-ui/core/Popper';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -35,31 +29,11 @@ import Dialog from '@material-ui/core/Dialog';
 function Navbar(props) {
 
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [isDialogOpen, setDialogOpen] = React.useState(false);
   const { authUser } = React.useContext(AuthContext);
   const anchorRef = React.useRef(null);
-  const prevOpen = React.useRef(open);
   const authRef = React.useRef(true);
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    };
-    setOpen(false);
-  };
-
-  const handleListKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    };
-  };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
@@ -84,42 +58,12 @@ function Navbar(props) {
         <div>
           <Button
             ref={anchorRef}
-            aria-controls={open ? 'menu-list-grow' : undefined}
+            // aria-controls={open ? 'menu-list-grow' : undefined}
             aria-haspopup="true"
-            onClick={handleToggle}
+            onClick={() => props.history.push("/services/order-now")}
           >
             ORDER NOW
           </Button>
-          <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-              >
-                <Paper>
-                  <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                      <MenuItem onClick={handleClose}>
-                        <Typography component={'span'} align="center" onClick={() => props.history.push('/services/order-now')}>
-                          Solo Q Boosting
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <Typography component={'span'} align="center" onClick={() => props.history.push('/services/order-now')}>
-                          Duo Q Boosting
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem onClick={handleClose} style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography component={'span'} onClick={() => props.history.push('/services/order-now')}>
-                          LoL Coaching
-                        </Typography>
-                      </MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
         </div>
       </Breadcrumbs>
       {
@@ -132,7 +76,7 @@ function Navbar(props) {
             onClick={() => props.history.push("/dashboard")}
           >
             Dashboard
-            </Button>
+          </Button>
           : <Button
             variant="outlined"
             size="small"
@@ -141,7 +85,7 @@ function Navbar(props) {
             onClick={() => setDialogOpen(true)}
           >
             Members Area
-            </Button>
+          </Button>
       }
     </div>
   );
@@ -202,13 +146,6 @@ function Navbar(props) {
     </div>
   );
 
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
-    prevOpen.current = open;
-  }, [open]);
-
   return (
     <AppBar position="sticky" color="inherit">
       <Container component="main" maxWidth="lg">
@@ -222,8 +159,8 @@ function Navbar(props) {
       <Dialog open={isDialogOpen} onClose={handleDialogClose} aria-labelledby="form-dialog-title" >
         {
           authRef.current
-            ? <SignIn authRef={authRef} />
-            : <SignUp authRef={authRef} />
+            ? <div style={{ padding: '60px 10px' }}><SignIn authRef={authRef} redirect={true} /></div>
+            : <div style={{ padding: '60px 10px' }}><SignUp authRef={authRef} /></div>
         }
       </Dialog>
     </AppBar>

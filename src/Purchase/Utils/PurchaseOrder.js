@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -15,11 +14,13 @@ import Card from '@material-ui/core/Card';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import PaypalCheckoutButton from '../../Common/Paypal/PaypalCheckoutButton';
 import firebase from 'firebase';
+import { RegionContext } from '../../Common/Context/RegionContext';
 import { TierAndDivisionContext } from '../../Common/Context/TierAndDivisionContext';
 import { AuthContext } from '../../Common/Context/AuthContext';
 import { CurrentLPContext } from '../../Common/Context/CurrentLPContext';
 import { QueueTypeContext } from '../../Common/Context/QueueTypeContext';
 import { NumberOfGamesContext } from '../../Common/Context/NumberOfGamesContext';
+import { ExtrasContext } from '../../Common/Context/ExtrasContext';
 import ExtrasCheckBoxes from '../Components/ExtrasCheckboxes';
 
 import SignUp from '../../SignUp/SignUp';
@@ -44,35 +45,25 @@ function PurchaseOrder(props) {
 
   const classes = useStyles();
   const { orderType } = props;
-  const [orderValue, setOrderValue] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [isLoading, setLoading] = React.useState(false);
-  const authRef = React.useRef(true);
+  const authRef = React.useRef();
+  const orderRef = React.useRef();
 
   // CONTEXT
 
   const { authUser, authUserPaymentSuccesful, setAuthUserPaymentSuccesful } = React.useContext(AuthContext);
+  const { extras } = React.useContext(ExtrasContext);
   const { numberOfGames } = React.useContext(NumberOfGamesContext);
   const { currentLP } = React.useContext(CurrentLPContext);
   const { queueType } = React.useContext(QueueTypeContext);
+  const { region } = React.useContext(RegionContext);
   const {
     currentTier,
     currentDivision,
     desiredTier,
     desiredDivision,
   } = React.useContext(TierAndDivisionContext);
-
-  const uiConfig = {
-    signInFlow: "popup",
-    signInOptions: [
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-      firebase.auth.TwitterAuthProvider.PROVIDER_ID
-    ],
-    callbacks: {
-      signInSuccessWithAuthResult: () => false
-    }
-  };
 
   React.useEffect(() => {
     console.log('Firestore call!');
@@ -93,7 +84,7 @@ function PurchaseOrder(props) {
     })
       .then(res => {
         if (parseInt(res.data.result) > 0) {
-          setOrderValue(res.data.result);
+          orderRef.current = res.data.result;
           setLoading(false);
         };
       })
@@ -149,47 +140,57 @@ function PurchaseOrder(props) {
   };
 
   const authUIActions = (authUser) => {
-    if (authUser) return <PaypalCheckoutButton order={order} />
-    else return authRef.current ? <SignIn authRef={authRef} /> : <SignUp authRef={authRef} />// <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+    if (authUser) return <PaypalCheckoutButton order={order} paypal={true} />
+    else return authRef.current ? <SignIn authRef={authRef} /> : <SignUp authRef={authRef} />  // <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
   };
 
   const getOrderDescription = () => {
     if (orderType === "PLACEMENT") {
       return {
+        region: region,
         orderType: orderType,
         currentTier: currentTier,
-        numberOfGames: numberOfGames
+        numberOfGames: numberOfGames,
+        extras: extras
       };
     } else if (queueType === "Division") {
       return {
+        region: region,
         orderType: orderType,
         queueType: queueType,
         currentTier: currentTier,
         currentDivision: currentDivision,
         currentLP: currentLP,
         desiredTier: desiredTier,
-        desiredDivision: desiredDivision
+        desiredDivision: desiredDivision,
+        extras: extras
       };
     } else if (queueType === "Wins") {
       return {
+        region: region,
         orderType: orderType,
         queueType: queueType,
         currentTier: currentTier,
         currentDivision: currentDivision,
-        numberOfGames: numberOfGames
+        numberOfGames: numberOfGames,
+        extras: extras
       };
     } else if (queueType === "Ranked Games") {
       return {
+        region: region,
         orderType: orderType,
         queueType: queueType,
         currentTier: currentTier,
-        numberOfGames: numberOfGames
+        numberOfGames: numberOfGames,
+        extras: extras
       };
     } else if (queueType === "Normal Games") {
       return {
+        region: region,
         orderType: orderType,
         queueType: queueType,
         numberOfGames: numberOfGames,
+        extras: extras
       };
     };
   };
@@ -208,11 +209,11 @@ function PurchaseOrder(props) {
 
   const order = {
     customer: authUser && authUser.displayName,
-    total: orderValue,
+    total: orderRef.current,
     items: [
       {
         name: 'Digital Goods',
-        price: orderValue,
+        price: orderRef.current,
         quantity: 1,
         currency: 'USD'
       }
@@ -231,7 +232,7 @@ function PurchaseOrder(props) {
             <Grid item xs={12} sm={6}>
               <Grid container>
                 <Grid item xs={12}>
-                  {isLoading ? <CircularProgress size={30} /> : <Typography style={{ fontSize: '1.5rem' }}>{`$ ${orderValue}`}</Typography>}
+                  {isLoading ? <CircularProgress size={30} /> : <Typography style={{ fontSize: '1.5rem' }}>{`$ ${orderRef.current}`}</Typography>}
                 </Grid>
                 <Grid item xs={12}>
                   <Button variant="outlined" color="primary" disabled={isLoading} onClick={handleClickOpen} classes={{ root: classes.checkoutButton, label: classes }}>

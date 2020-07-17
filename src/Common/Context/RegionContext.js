@@ -5,7 +5,7 @@ export const RegionContext = createContext();
 
 export const RegionProvider = (props) => {
 
-  const { region, handleRegionChange } = useRegionState('NA');
+  const { region, handleRegionChange } = useRegionState('NA1');
 
   return (
     <RegionContext.Provider

@@ -1,32 +1,60 @@
-import React from 'react';
-import List from '@material-ui/core/List';
+import React, { useEffect, useState } from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
+import { css } from 'glamor';
+import ScrollToBottom from 'react-scroll-to-bottom';
+import Firebase from '../../Firebase';
+import moment from 'moment';
 
-const useStyles = makeStyles((theme) => ({
-  list: {
-    marginBottom: theme.spacing(2),
-  }
-}));
+const ROOT_CSS = css({
+  height: 400,
+  width: 'auto'
+});
 
 function Messages(props) {
 
-  const classes = useStyles();
-  const { messages, authUser } = props;
-  console.log("RENDER");
+  const { authUser, order_id } = props;
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    Firebase.getMessages(order_id, onSnapshot => {
+      onSnapshot.docChanges().forEach(change => {
+        // console.log(change.doc.data());
+        setMessages(st => [...st, change.doc.data()]);
+      });
+    });
+  }, [order_id]);
 
   return (
-    <List className={classes.list}>
-      {messages.map((message, i) => {
+    <ScrollToBottom className={ROOT_CSS}>
+      {messages && messages.map((message, i) => {
+
         let senderStyle;
-        if (message.sender.id === authUser.uid) senderStyle = { textAlign: "end" };
-        else senderStyle = {};
-        return <ListItem key={i} button>
-          <ListItemText key={i} primary={message.sender.displayName} secondary={message.content} style={senderStyle} />
-        </ListItem>
+        if (message.sender.id === authUser.uid) senderStyle = { textAlign: "end", maxWidth: '80%' };
+        else senderStyle = { maxWidth: '80%' };
+
+        let dateSenderStyle;
+        if (message.sender.id === authUser.uid) dateSenderStyle = { textAlign: "start", maxWidth: '20%', marginTop: 'auto' };
+        else dateSenderStyle = { order: '1', maxWidth: '20%', textAlign: "end", marginTop: 'auto' };
+
+        let dateString = moment.unix(message.date / 1000).format("HH:mm A");
+
+        return (<ListItem key={i}>
+          <ListItemText
+            primary={dateString}
+            style={dateSenderStyle}
+            primaryTypographyProps={{ variant: "caption", style: { fontSize: '0.65rem' } }}
+          />
+          <ListItemText
+            key={i}
+            primary={message.sender.displayName}
+            secondary={message.content}
+            style={senderStyle}
+            secondaryTypographyProps={{ style: { wordWrap: "break-word" } }}
+          />
+        </ListItem>)
       })}
-    </List>
+    </ScrollToBottom>
   );
 }
 

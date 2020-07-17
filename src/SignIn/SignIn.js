@@ -135,6 +135,9 @@ const SignInForm = withFormik({
         .doSignInWithEmailAndPassword(values.email, values.password)
         .then(() => {
           setSubmitting(false);
+          if(props.redirect){
+            props.history.push('/dashboard');
+          };
         })
         .catch(error => {
           if (error.code === 'auth/user-not-found') {

@@ -35,15 +35,15 @@ function RegionForm() {
         onChange={handleRegionChange}
         label="Region"
       >
-        <MenuItem value="NA">NA</MenuItem>
-        <MenuItem value="EUW">EUW</MenuItem>
-        <MenuItem value="EUNE">EUNE</MenuItem>
-        <MenuItem value="LAN">LAN</MenuItem>
-        <MenuItem value="LAS">LAS</MenuItem>
-        <MenuItem value="BR">BR</MenuItem>
-        <MenuItem value="TR">TR</MenuItem>
+        <MenuItem value="NA1">NA</MenuItem>
+        <MenuItem value="EUW1">EUW</MenuItem>
+        <MenuItem value="EUN1">EUNE</MenuItem>
+        <MenuItem value="LA1">LAN</MenuItem>
+        <MenuItem value="LA2">LAS</MenuItem>
+        <MenuItem value="BR1">BR</MenuItem>
+        <MenuItem value="TR1">TR</MenuItem>
         <MenuItem value="RU">RU</MenuItem>
-        <MenuItem value="OCE">OCE</MenuItem>
+        <MenuItem value="OC1">OCE</MenuItem>
       </Select>
     </FormControl>
   );
