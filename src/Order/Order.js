@@ -14,13 +14,10 @@ import Tab from '@material-ui/core/Tab';
 import ChampionsAndRolesTab from './Tabs/ChampionsAndRolesTab';
 import AccountInfoTab from './Tabs/AccountInfoTab';
 import Footer from '../Common/Footer/Footer';
-import { PreferencesProvider } from './Hooks/PreferencesContext';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import OrderDetails from './Components/OrderDetails';
-// import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-// import Paper from '@material-ui/core/Paper';
 import OrderTimeline from './Components/OrderTimeline'
 
 const useStyles = makeStyles((theme) => ({
@@ -57,18 +54,15 @@ function Order(props) {
         if (doc.exists) {
           if (doc.data().order_description.extras.champAndRoles) {
             setAvailable(false);
-          };
+          }
         };
       }).catch(err => console.log(err));
   }, [order_id, authUser]);
-
-  console.log("RENDER");
 
   return (
     <div>
       <Navbar />
       <Container component="main" maxWidth="lg" disableGutters={true}>
-        {/* <Paper> */}
         <Grid container justify="space-evenly" style={{ marginTop: '3rem' }}>
           <Grid item xs={12} md={3}>
             <OrderDetails order_id={order_id} />
@@ -94,20 +88,15 @@ function Order(props) {
                   }
                 </Tabs>
               </AppBar>
-              {/* <Paper style={{ marginTop: '-10px', zIndex: '-10' }}> */}
               <TabPanel value="SOLO_QUEUE">
                 <AccountInfoTab order_id={order_id} />
               </TabPanel>
-              {/* </Paper> */}
               <TabPanel value="DUO_QUEUE" classes={{ root: classes.ChampionAndRolesTab }}>
-                <PreferencesProvider>
-                  <ChampionsAndRolesTab order_id={order_id} />
-                </PreferencesProvider>
+                <ChampionsAndRolesTab order_id={order_id} />
               </TabPanel>
             </TabContext>
           </Grid>
         </Grid>
-        {/* </Paper> */}
         <Grid container justify="space-evenly">
           <Grid item xs={11} md={3}>
             <OrderTimeline order_id={order_id} />

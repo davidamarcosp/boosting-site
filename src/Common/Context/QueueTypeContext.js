@@ -1,11 +1,14 @@
 import React from 'react';
-import useQueueTypeState from '../../Purchase/Hooks/useQueueTypeState';
 
 export const QueueTypeContext = React.createContext();
 
 export const QueueTypeProvider = (props) => {
 
-  const { queueType, handleQueueTypeChange } = useQueueTypeState("Division");
+  const [queueType, setQueueType] = React.useState('Division');
+
+  const handleQueueTypeChange = (event) => {
+    setQueueType(event.target.value);
+  };
 
   return (
     <QueueTypeContext.Provider

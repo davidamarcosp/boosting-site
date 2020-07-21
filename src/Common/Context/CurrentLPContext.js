@@ -1,11 +1,14 @@
 import React, { createContext } from "react";
-import useCurrentLPState from '../../Purchase/Hooks/useCurrentLPState';
 
 export const CurrentLPContext = createContext();
 
 export const CurrentLPProvider = (props) => {
 
-  const { currentLP, handleCurrentLPChange } = useCurrentLPState(0);
+  const [currentLP, setCurrentLP] = React.useState(0);
+
+  const handleCurrentLPChange = event => {
+    setCurrentLP(event.target.value);
+  };
 
   return (
     <CurrentLPContext.Provider

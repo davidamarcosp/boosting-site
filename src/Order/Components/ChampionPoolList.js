@@ -1,11 +1,10 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
-import { ChosenChampsContext } from '../Hooks/PreferencesContext';
 import champs from '../../Common/champion.json';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,27 +39,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ChampionPoolList() {
+function ChampionPoolList(props) {
+
+  const { state, dispatch } = props;
 
   const classes = useStyles();
   const initialChampPool = useRef();
   const [champions, setChampions] = useState();
   const [query, setQuery] = useState("");
   const [wait, setWait] = useState(true);
-  const { isSaved, setChosenChampions } = useContext(ChosenChampsContext);
-
-  const handleSelectedChamp = (value) => () => {
-    setChosenChampions(st => {
-      let matchingChamp = st.find(champ => {
-        return champ.toUpperCase() === value.toUpperCase();
-      });
-      if (matchingChamp) {
-        return [...st];
-      } else {
-        return [...st, value];
-      };
-    });
-  };
 
   const handleSearch = (event) => {
     let newValue = event.target.value;
@@ -72,16 +59,45 @@ function ChampionPoolList() {
     });
   };
 
+  const ChampionList = () => {
+    if (!wait) {
+      return champions.map((value) => {
+        const labelId = `transfer-list-item-${value}-label`;
+        return (
+          <ListItem
+            key={value}
+            role="listitem"
+            button
+            onClick={() => {
+              dispatch({ type: 'CHOOSE_CHAMPION', payload: value })
+            }}
+            disabled={state.isSaved}
+          >
+            <ListItemText id={labelId} primary={value} />
+          </ListItem>
+        );
+      });
+    };
+  };
+
+  const MemoizedChampionList = React.useMemo(() => {
+    return ChampionList();
+    // eslint-disable-next-line
+  }, [query, wait]);
+
   React.useEffect(() => {
     const parsedChamps = Object.values(champs.data);
     const champsArray = parsedChamps.map(champ => champ.name);
     initialChampPool.current = champsArray;
     setChampions(champsArray);
     // Waiting for the other states to settle before rendering the list
-    setTimeout(() => {
+    let timer = setTimeout(() => {
       setWait(false);
     }, [500]);
-  }, [setChampions, isSaved]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [setChampions]);
 
   return (
     <Paper className={classes.paper}>
@@ -91,7 +107,7 @@ function ChampionPoolList() {
         color="primary"
         value={query}
         onChange={handleSearch}
-        disabled={isSaved}
+        disabled={state.isSaved}
         inputProps={{
           className: classes.TextFieldinput
         }}
@@ -100,20 +116,7 @@ function ChampionPoolList() {
         }}
       />
       <List dense component="div" role="list">
-        {!wait && champions.map((value) => {
-          const labelId = `transfer-list-item-${value}-label`;
-          return (
-            <ListItem
-              key={value}
-              role="listitem"
-              button
-              onClick={handleSelectedChamp(value)}
-              disabled={isSaved}
-            >
-              <ListItemText id={labelId} primary={value} />
-            </ListItem>
-          );
-        })}
+        {!state.isSaved && MemoizedChampionList}
       </List>
     </Paper>
   );

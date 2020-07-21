@@ -1,48 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import Card from '@material-ui/core/Card'
-import Firebase from '../../Firebase';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import { withStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import React, { useEffect, useState, memo } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import Card from "@material-ui/core/Card";
+import Firebase from "../../Firebase";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+import { withStyles } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import Tooltip from "@material-ui/core/Tooltip";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
-    marginRight: 'auto',
-    marginLeft: 'auto',
-    marginBottom: '2rem',
+    width: "100%",
+    marginRight: "auto",
+    marginLeft: "auto",
+    marginBottom: "2rem",
     backgroundColor: theme.palette.background.paper,
-    [theme.breakpoints.up('md')]: {
-      width: '100%',
+    [theme.breakpoints.up("md")]: {
+      width: "100%",
       maxWidth: 360,
-      marginBottom: 0
-    }
+      marginBottom: 0,
+    },
   },
   overline: {
-    lineHeight: '1.75rem',
+    lineHeight: "1.75rem",
   },
   text: {
-    marginLeft: '1rem',
-    fontWeight: '600'
+    marginLeft: "1rem",
+    fontWeight: "600",
   },
   SecondaryText: {
-    marginLeft: '0.5rem',
-    fontSize: '0.85rem',
-    position: 'absolute',
-    left: '50%',
-    transform: 'translateX(-50%)'
+    marginLeft: "0.5rem",
+    fontSize: "0.85rem",
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
   },
   snackbar: {
-    backgroundColor: '#3f68d9'
-  }
+    backgroundColor: "#3f68d9",
+  },
+  InfoIcon: {
+    position: "absolute",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
+    left: "20%",
+    color: "gray",
+  },
 }));
 
 function OrderDetails(props) {
@@ -57,20 +66,20 @@ function OrderDetails(props) {
     let tier = orderDetails.currentTier;
     switch (tier) {
       case 0:
-        return "Iron"
+        return "Iron";
       case 1:
-        return "Bronze"
+        return "Bronze";
       case 2:
-        return "Silver"
+        return "Silver";
       case 3:
-        return "Gold"
+        return "Gold";
       case 4:
-        return "Platinum"
+        return "Platinum";
       case 5:
-        return "Diamond"
+        return "Diamond";
       default:
         break;
-    };
+    }
   };
 
   const ParseTierAndDivision = (orderDetails, option) => {
@@ -82,7 +91,7 @@ function OrderDetails(props) {
     } else if (option === "current") {
       tier = orderDetails.currentTier;
       division = orderDetails.currentDivision;
-    };
+    }
     switch (tier) {
       case 0:
         switch (division) {
@@ -170,7 +179,7 @@ function OrderDetails(props) {
         break;
       default:
         break;
-    };
+    }
   };
 
   const ParseOrderType = (orderDetails) => {
@@ -184,7 +193,7 @@ function OrderDetails(props) {
         return "Placement Games";
       default:
         break;
-    };
+    }
   };
 
   const ParseQueueType = (orderDetails) => {
@@ -200,7 +209,7 @@ function OrderDetails(props) {
         return "Normal Games";
       default:
         break;
-    };
+    }
   };
 
   const ParseRegion = (orderDetails) => {
@@ -226,19 +235,25 @@ function OrderDetails(props) {
         return "OC";
       default:
         break;
-    };
+    }
   };
 
   const handlePauseChange = (event) => {
     setTimeout(() => {
-      setPaused(isPaused => {
-        Firebase.handlePauseShit(order_id, !isPaused)
+      setPaused((isPaused) => {
+        Firebase.handlePauseShit(order_id, !isPaused);
         !isPaused
-          ? Firebase.setEvent(order_id, { date: Date.now(), text: "Your order has been paused" })
-          : Firebase.setEvent(order_id, { date: Date.now(), text: "Your order has been unpaused" })
+          ? Firebase.setEvent(order_id, {
+              date: Date.now(),
+              text: "Your order has been paused",
+            })
+          : Firebase.setEvent(order_id, {
+              date: Date.now(),
+              text: "Your order has been unpaused",
+            });
       });
       setOpen(true);
-    }, 250)
+    }, 250);
   };
 
   useEffect(() => {
@@ -251,8 +266,8 @@ function OrderDetails(props) {
           setPaused(false);
         }
         setOrderDetails(doc.data());
-      };
-    })
+      }
+    });
   }, [order_id]);
 
   const IOSSwitch = withStyles((theme) => ({
@@ -264,18 +279,18 @@ function OrderDetails(props) {
     },
     switchBase: {
       padding: 1,
-      '&$checked': {
-        transform: 'translateX(34px)',
+      "&$checked": {
+        transform: "translateX(34px)",
         color: theme.palette.common.white,
-        '& + $track': {
-          backgroundColor: '#3f68d9',
+        "& + $track": {
+          backgroundColor: "#3f68d9",
           opacity: 1,
-          border: 'none',
+          border: "none",
         },
       },
-      '&$focusVisible $thumb': {
-        color: '#3f68d9',
-        border: '6px solid #fff',
+      "&$focusVisible $thumb": {
+        color: "#3f68d9",
+        border: "6px solid #fff",
       },
     },
     thumb: {
@@ -287,7 +302,7 @@ function OrderDetails(props) {
       border: `1px solid ${theme.palette.grey[400]}`,
       backgroundColor: theme.palette.grey[400],
       opacity: 1,
-      transition: theme.transitions.create(['background-color', 'border']),
+      transition: theme.transitions.create(["background-color", "border"]),
     },
     checked: {},
     focusVisible: {},
@@ -315,7 +330,14 @@ function OrderDetails(props) {
   };
 
   function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} classes={{ filledInfo: classes.snackbar }} />;
+    return (
+      <MuiAlert
+        elevation={6}
+        variant="filled"
+        {...props}
+        classes={{ filledInfo: classes.snackbar }}
+      />
+    );
   }
 
   const getOrderUI = (order) => {
@@ -326,68 +348,72 @@ function OrderDetails(props) {
       return (
         <>
           <ListItem>
-            <Typography variant="body2"
+            <Typography
+              variant="body2"
               classes={{
-                root: classes.text
+                root: classes.text,
               }}
             >
               Mode:
-          </Typography>
+            </Typography>
             <Typography
               variant="caption"
               classes={{
-                root: classes.SecondaryText
+                root: classes.SecondaryText,
               }}
             >
               {ParseOrderType(orderDetails)}
             </Typography>
           </ListItem>
           <ListItem>
-            <Typography variant="body2"
+            <Typography
+              variant="body2"
               classes={{
-                root: classes.text
+                root: classes.text,
               }}
             >
               Region:
-          </Typography>
+            </Typography>
             <Typography
               variant="caption"
               classes={{
-                root: classes.SecondaryText
+                root: classes.SecondaryText,
               }}
             >
               {ParseRegion(orderDetails)}
             </Typography>
           </ListItem>
           <ListItem>
-            <Typography variant="body2"
+            <Typography
+              variant="body2"
               classes={{
-                root: classes.text
+                root: classes.text,
               }}
             >
               Past Tier:
-          </Typography>
+            </Typography>
             <Typography
               variant="caption"
               classes={{
-                root: classes.SecondaryText
+                root: classes.SecondaryText,
               }}
             >
               {ParseTier(orderDetails)}
             </Typography>
           </ListItem>
           <ListItem>
-            <Typography variant="body2"
+            <Typography
+              variant="body2"
               classes={{
-                root: classes.text
+                root: classes.text,
               }}
             >
               # of Games:
-          </Typography>
+            </Typography>
             <Typography
               variant="caption"
               classes={{
-                root: classes.SecondaryText
+                root: classes.SecondaryText,
               }}
             >
               {orderDetails.numberOfGames}
@@ -399,63 +425,66 @@ function OrderDetails(props) {
       return (
         <>
           <ListItem>
-            <Typography variant="body2"
+            <Typography
+              variant="body2"
               classes={{
-                root: classes.text
+                root: classes.text,
               }}
             >
               Mode:
-          </Typography>
+            </Typography>
             <Typography
               variant="caption"
               classes={{
-                root: classes.SecondaryText
+                root: classes.SecondaryText,
               }}
             >
               {ParseOrderType(orderDetails)}
             </Typography>
           </ListItem>
           <ListItem>
-            <Typography variant="body2"
+            <Typography
+              variant="body2"
               classes={{
-                root: classes.text
+                root: classes.text,
               }}
             >
               Type:
-          </Typography>
+            </Typography>
             <Typography
               variant="caption"
               classes={{
-                root: classes.SecondaryText
+                root: classes.SecondaryText,
               }}
             >
               {ParseQueueType(orderDetails)}
             </Typography>
           </ListItem>
           <ListItem>
-            <Typography variant="body2"
+            <Typography
+              variant="body2"
               classes={{
-                root: classes.text
+                root: classes.text,
               }}
             >
               Region:
-          </Typography>
+            </Typography>
             <Typography
               variant="caption"
               classes={{
-                root: classes.SecondaryText
+                root: classes.SecondaryText,
               }}
             >
               {ParseRegion(orderDetails)}
             </Typography>
           </ListItem>
-          {queueType === "Wins"
-            ?
+          {queueType === "Wins" ? (
             <>
               <ListItem>
-                <Typography variant="body2"
+                <Typography
+                  variant="body2"
                   classes={{
-                    root: classes.text
+                    root: classes.text,
                   }}
                 >
                   Rank:
@@ -463,16 +492,17 @@ function OrderDetails(props) {
                 <Typography
                   variant="caption"
                   classes={{
-                    root: classes.SecondaryText
+                    root: classes.SecondaryText,
                   }}
                 >
                   {ParseTierAndDivision(orderDetails, "current")}
                 </Typography>
               </ListItem>
               <ListItem>
-                <Typography variant="body2"
+                <Typography
+                  variant="body2"
                   classes={{
-                    root: classes.text
+                    root: classes.text,
                   }}
                 >
                   # of Games:
@@ -480,22 +510,21 @@ function OrderDetails(props) {
                 <Typography
                   variant="caption"
                   classes={{
-                    root: classes.SecondaryText
+                    root: classes.SecondaryText,
                   }}
                 >
                   {orderDetails.numberOfGames}
                 </Typography>
               </ListItem>
             </>
-            : null
-          }
-          {queueType === "Ranked Games"
-            ?
+          ) : null}
+          {queueType === "Ranked Games" ? (
             <>
               <ListItem>
-                <Typography variant="body2"
+                <Typography
+                  variant="body2"
                   classes={{
-                    root: classes.text
+                    root: classes.text,
                   }}
                 >
                   Current Tier:
@@ -503,16 +532,17 @@ function OrderDetails(props) {
                 <Typography
                   variant="caption"
                   classes={{
-                    root: classes.SecondaryText
+                    root: classes.SecondaryText,
                   }}
                 >
                   {ParseTier(orderDetails)}
                 </Typography>
               </ListItem>
               <ListItem>
-                <Typography variant="body2"
+                <Typography
+                  variant="body2"
                   classes={{
-                    root: classes.text
+                    root: classes.text,
                   }}
                 >
                   # of Games:
@@ -520,22 +550,21 @@ function OrderDetails(props) {
                 <Typography
                   variant="caption"
                   classes={{
-                    root: classes.SecondaryText
+                    root: classes.SecondaryText,
                   }}
                 >
                   {orderDetails.numberOfGames}
                 </Typography>
               </ListItem>
             </>
-            : null
-          }
-          {queueType === "Normal Games"
-            ?
+          ) : null}
+          {queueType === "Normal Games" ? (
             <>
               <ListItem>
-                <Typography variant="body2"
+                <Typography
+                  variant="body2"
                   classes={{
-                    root: classes.text
+                    root: classes.text,
                   }}
                 >
                   # of Games:
@@ -543,22 +572,21 @@ function OrderDetails(props) {
                 <Typography
                   variant="caption"
                   classes={{
-                    root: classes.SecondaryText
+                    root: classes.SecondaryText,
                   }}
                 >
                   {orderDetails.numberOfGames}
                 </Typography>
               </ListItem>
             </>
-            : null
-          }
-          {queueType === "Division"
-            ?
+          ) : null}
+          {queueType === "Division" ? (
             <>
               <ListItem>
-                <Typography variant="body2"
+                <Typography
+                  variant="body2"
                   classes={{
-                    root: classes.text
+                    root: classes.text,
                   }}
                 >
                   Start:
@@ -566,16 +594,17 @@ function OrderDetails(props) {
                 <Typography
                   variant="caption"
                   classes={{
-                    root: classes.SecondaryText
+                    root: classes.SecondaryText,
                   }}
                 >
                   {ParseTierAndDivision(orderDetails, "current")}
                 </Typography>
               </ListItem>
               <ListItem>
-                <Typography variant="body2"
+                <Typography
+                  variant="body2"
                   classes={{
-                    root: classes.text
+                    root: classes.text,
                   }}
                 >
                   Finish:
@@ -583,28 +612,28 @@ function OrderDetails(props) {
                 <Typography
                   variant="caption"
                   classes={{
-                    root: classes.SecondaryText
+                    root: classes.SecondaryText,
                   }}
                 >
                   {ParseTierAndDivision(orderDetails, "desired")}
                 </Typography>
               </ListItem>
             </>
-            : null
-          }
+          ) : null}
         </>
-      )
-    };
+      );
+    }
   };
 
   return (
     <Card className={classes.root} elevation={5}>
       <List component="nav" aria-label="main mailbox folders">
         <ListItem>
-          <ListItemText primary="Order details"
+          <ListItemText
+            primary="Order details"
             primaryTypographyProps={{
               variant: "h6",
-              align: "center"
+              align: "center",
             }}
           />
         </ListItem>
@@ -615,6 +644,12 @@ function OrderDetails(props) {
       </List>
       <Divider />
       <List>
+        <Tooltip
+          title="Pause explanation here"
+          className={classes.InfoIcon}
+        >
+          <InfoOutlinedIcon />
+        </Tooltip>
         <FormControlLabel
           control={<IOSSwitch />}
           label="Pause Order"
@@ -624,13 +659,12 @@ function OrderDetails(props) {
           <Alert onClose={handleClose} severity="info">
             {isPaused
               ? "Your order has been paused"
-              : "Your order has been unpaused"
-            }
+              : "Your order has been unpaused"}
           </Alert>
         </Snackbar>
       </List>
-    </Card >
+    </Card>
   );
-};
+}
 
-export default OrderDetails;
+export default memo(OrderDetails);

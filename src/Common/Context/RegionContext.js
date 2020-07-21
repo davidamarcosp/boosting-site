@@ -1,11 +1,14 @@
 import React, { createContext } from "react";
-import useRegionState from '../../Purchase/Hooks/useRegionState';
 
 export const RegionContext = createContext();
 
 export const RegionProvider = (props) => {
 
-  const { region, handleRegionChange } = useRegionState('NA1');
+  const [region, setRegion] = React.useState('NA1');
+
+  const handleRegionChange = (event) => {
+    setRegion(event.target.value);
+  };
 
   return (
     <RegionContext.Provider

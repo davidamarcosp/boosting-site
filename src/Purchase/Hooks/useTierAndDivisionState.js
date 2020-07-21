@@ -1,15 +1,11 @@
 import React from 'react';
-import useCurrentTierState from './useCurrentTierState';
-import useCurrentDivisionState from './useCurrentDivisionState';
-import useDesiredTierState from './useDesiredTierState';
-import useDesiredDivisionState from './useDesiredDivisionState';
 
 const useTierAndDivisionState = () => {
 
-  const { currentTier, setCurrentTier } = useCurrentTierState(2);
-  const { currentDivision, setCurrentDivision } = useCurrentDivisionState(3);
-  const { desiredTier, setDesiredTier } = useDesiredTierState(3);
-  const { desiredDivision, setDesiredDivision } = useDesiredDivisionState(0);
+  const [currentTier, setCurrentTier] = React.useState(2);
+  const [currentDivision, setCurrentDivision] = React.useState(3);
+  const [desiredTier, setDesiredTier] = React.useState(3);
+  const [desiredDivision, setDesiredDivision] = React.useState(0);
 
   React.useEffect(() => {
     if (currentTier === 5 && currentDivision === 3) {

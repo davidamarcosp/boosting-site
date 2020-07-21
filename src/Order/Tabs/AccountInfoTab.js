@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Firebase from '../../Firebase';
+import AccountInfoReducer from '../Hooks/AccountInfoReducer';
 // import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
@@ -27,26 +28,20 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const initialState = {
+  username: '',
+  password: '',
+  summoner: '',
+  error: '',
+  isSaved: false
+};
+
 function AccountInfoTab(props) {
 
-  const classes = useStyles();
   const { order_id } = props;
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  // const [summoner, setSummoner] = useState("");
-  const [isSaved, setSaved] = useState(false);
-
-  // const handleSummonerChange = (event) => {
-  //   setSummoner(event.target.value);
-  // };
-
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
+  const [state, dispatch] = useReducer(AccountInfoReducer, initialState);
+  const { username, password, summoner, error, isSaved } = state;
+  const classes = useStyles();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -58,8 +53,8 @@ function AccountInfoTab(props) {
     //   }
     // }).then((response) => {
     //   const { accountId } = response.data; // add accountId to firebase method
-    Firebase.doSetCredentials(username, password, order_id);
-    setSaved(true);
+    Firebase.doSetCredentials(username, password, summoner, order_id);
+    dispatch({ type: 'SUBMIT' });
     // }).catch((error) => {
     //   alert("Summoner does not exist");
     // });
@@ -68,13 +63,19 @@ function AccountInfoTab(props) {
   useEffect(() => {
     Firebase.getCrendentials(order_id)
       .then((doc) => {
-        if (doc.exists) {
-          if (doc.data().credentials !== undefined) {
-            // setSummoner(doc.data().credentials.summoner);
-            setUsername(doc.data().credentials.username);
-            setPassword(doc.data().credentials.password);
-            setSaved(doc.data().credentials.saved);
-          };
+        if (doc.exists && doc.data().credentials) {
+          const { username, password, summoner, saved } = doc.data().credentials;
+          dispatch({
+            type: 'SET_DATA',
+            payload: {
+              username: username,
+              password: password,
+              summoner: summoner,
+              isSaved: saved
+            }
+          });
+        } else {
+          dispatch({ type: 'SET_ERROR', payload: 'Document does not exist' });
         };
       }).catch(err => console.log(err));
   }, [order_id]);
@@ -85,8 +86,14 @@ function AccountInfoTab(props) {
       <CssBaseline />
       <div className={classes.paper}>
         <form className={classes.form} onSubmit={handleSubmit}>
-          {/* <TextField
-            onChange={handleSummonerChange}
+          <TextField
+            onChange={(e) =>
+              dispatch({
+                type: 'FIELD',
+                fieldName: 'summoner',
+                payload: e.currentTarget.value,
+              })
+            }
             value={summoner}
             variant="outlined"
             margin="normal"
@@ -97,9 +104,15 @@ function AccountInfoTab(props) {
             autoComplete="summoner"
             disabled={isSaved}
             InputLabelProps={{ shrink: true }}
-          /> */}
+          />
           <TextField
-            onChange={handleUsernameChange}
+            onChange={(e) =>
+              dispatch({
+                type: 'FIELD',
+                fieldName: 'username',
+                payload: e.currentTarget.value,
+              })
+            }
             value={username}
             variant="outlined"
             margin="normal"
@@ -112,7 +125,13 @@ function AccountInfoTab(props) {
             InputLabelProps={{ shrink: true }}
           />
           <TextField
-            onChange={handlePasswordChange}
+            onChange={(e) =>
+              dispatch({
+                type: 'FIELD',
+                fieldName: 'password',
+                payload: e.currentTarget.value,
+              })
+            }
             value={password}
             variant="outlined"
             margin="normal"

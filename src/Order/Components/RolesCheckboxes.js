@@ -1,10 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { RolesContext, ChosenChampsContext } from '../Hooks/PreferencesContext';
-import Firebase from '../../Firebase';
 import Avatar from '@material-ui/core/Avatar';
 import topLane from '../../Common/RolesIcons/Position_Silver-Top.png'
 import jungle from '../../Common/RolesIcons/Position_Silver-Jungle.png'
@@ -50,35 +48,8 @@ function RolesCheckBoxes(props) {
   }));
 
   const classes = useStyles();
-  const { order_id } = props;
-  const { roles, setRoles } = useContext(RolesContext);
-  const { isSaved, setSaved } = useContext(ChosenChampsContext);
-
-  const handleRolesChange = (event) => {
-    setRoles({ ...roles, [event.target.name]: event.target.checked });
-  };
-
-  useEffect(() => {
-    Firebase.getPreferences(order_id)
-      .then((doc) => {
-        if (doc.exists) {
-          if (doc.data().preferences) {
-            let roles = doc.data().preferences.roles;
-            setRoles(st => {
-              return {
-                ...st,
-                top: roles.top,
-                mid: roles.mid,
-                jungle: roles.jungle,
-                adc: roles.adc,
-                support: roles.support
-              };
-            });
-            setSaved(doc.data().preferences.saved);
-          };
-        };
-      }).catch(err => console.log(err));
-  }, [order_id, setRoles, isSaved, setSaved]);
+  const { state, dispatch } = props;
+  const { roles, isSaved } = state;
 
   return (
     <div className={classes.rootForm}>
@@ -88,7 +59,13 @@ function RolesCheckBoxes(props) {
             control={<Checkbox
               color="primary"
               checked={roles.top}
-              onChange={handleRolesChange}
+              onChange={(e) =>
+                dispatch({
+                  type: 'CHECK',
+                  fieldName: 'top',
+                  payload: e.currentTarget.checked,
+                })
+              }
               name="top"
               classes={{ root: classes.extraCheckbox }}
             />}
@@ -100,7 +77,13 @@ function RolesCheckBoxes(props) {
             control={<Checkbox
               color="primary"
               checked={roles.jungle}
-              onChange={handleRolesChange}
+              onChange={(e) =>
+                dispatch({
+                  type: 'CHECK',
+                  fieldName: 'jungle',
+                  payload: e.currentTarget.checked,
+                })
+              }
               name="jungle"
               classes={{ root: classes.extraCheckbox }}
             />}
@@ -112,7 +95,13 @@ function RolesCheckBoxes(props) {
             control={<Checkbox
               color="primary"
               checked={roles.mid}
-              onChange={handleRolesChange}
+              onChange={(e) =>
+                dispatch({
+                  type: 'CHECK',
+                  fieldName: 'mid',
+                  payload: e.currentTarget.checked,
+                })
+              }
               name="mid"
               classes={{ root: classes.extraCheckbox }}
             />}
@@ -122,8 +111,15 @@ function RolesCheckBoxes(props) {
           />
           <FormControlLabel
             control={<Checkbox
-              color="primary" checked={roles.support}
-              onChange={handleRolesChange}
+              color="primary"
+              checked={roles.support}
+              onChange={(e) =>
+                dispatch({
+                  type: 'CHECK',
+                  fieldName: 'support',
+                  payload: e.currentTarget.checked,
+                })
+              }
               name="support"
               classes={{ root: classes.extraCheckbox }}
             />}
@@ -135,7 +131,13 @@ function RolesCheckBoxes(props) {
             control={<Checkbox
               color="primary"
               checked={roles.adc}
-              onChange={handleRolesChange}
+              onChange={(e) =>
+                dispatch({
+                  type: 'CHECK',
+                  fieldName: 'adc',
+                  payload: e.currentTarget.checked,
+                })
+              }
               name="adc"
               classes={{ root: classes.extraCheckbox }}
             />}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Messages from './Messages';
 import NewMessageInput from './NewMessageInput';
@@ -30,4 +30,4 @@ function Messenger(props) {
   );
 }
 
-export default Messenger;
+export default memo(Messenger);
