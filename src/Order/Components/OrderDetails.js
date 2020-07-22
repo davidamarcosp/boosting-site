@@ -276,6 +276,7 @@ function OrderDetails(props) {
       height: 26,
       padding: 0,
       margin: theme.spacing(1),
+      boxSizing: "inherit",
     },
     switchBase: {
       padding: 1,
@@ -644,10 +645,7 @@ function OrderDetails(props) {
       </List>
       <Divider />
       <List>
-        <Tooltip
-          title="Pause explanation here"
-          className={classes.InfoIcon}
-        >
+        <Tooltip title="Pause explanation here" className={classes.InfoIcon}>
           <InfoOutlinedIcon />
         </Tooltip>
         <FormControlLabel
